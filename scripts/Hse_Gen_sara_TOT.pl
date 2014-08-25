@@ -4430,9 +4430,7 @@ MAIN: {
 
 #Rasoul: Write control function for the zones in a case that ICE_CHP exists
 
-				if ($flag_ICE_CHP == 1) {
-
-				if ($upgrade_mode == 1) {
+				if ($flag_ICE_CHP == 1 && $upgrade_mode == 1) {
 					foreach my $up_name (values(%{$upgrade_num_name})) {
 						if ($up_name eq 'ICE_CHP') {				
 					
@@ -4450,7 +4448,7 @@ MAIN: {
 					if ($zone_counter == 1) {
 
 						&insert ($hse_file->{'ctl'}, '#END_FUNCTION_DATA', 1, 0, 0, "%s", &ICE_CHP_control_bldg($input->{$up_name}->{'system_type'},$zones->{'name->num'}->{'main_1'}, 4));
-						&replace ($hse_file->{'ctl'}, '#ZONE_LINKS', 1, 1, "%s\n", '1,0');
+						&replace ($hse_file->{'ctl'}, '#ZONE_LINKS', 1, 1, "%s\n", '1,0,0');
 					}
 					elsif ($zone_counter == 2) {
 
@@ -4459,12 +4457,13 @@ MAIN: {
 						if ($zones->{'name->num'}->{'bsmt'}) {	# tank is in bsmt zone
 
 							&insert ($hse_file->{'ctl'}, '#END_FUNCTION_DATA', 1, 0, 0, "%s", &ICE_CHP_control_bldg($input->{$up_name}->{'system_type'},$zones->{'name->num'}->{'bsmt'}, 14));
+							&replace ($hse_file->{'ctl'}, '#ZONE_LINKS', 1, 1, "%s\n", '1,2,0');
 						}
 						else {	# tank is in main_1 zone
 
 							&insert ($hse_file->{'ctl'}, '#END_FUNCTION_DATA', 1, 0, 0, "%s", &ICE_CHP_control_bldg($input->{$up_name}->{'system_type'},$zones->{'name->num'}->{'main_2'}, 14));
+							&replace ($hse_file->{'ctl'}, '#ZONE_LINKS', 1, 1, "%s\n", '1,2,0,0');
 						};
-						&replace ($hse_file->{'ctl'}, '#ZONE_LINKS', 1, 1, "%s\n", '1,2,0');
 								
 
 					}
@@ -4476,12 +4475,13 @@ MAIN: {
 						if ($zones->{'name->num'}->{'bsmt'}) {	# tank is in bsmt zone
 
 							&insert ($hse_file->{'ctl'}, '#END_FUNCTION_DATA', 1, 0, 0, "%s", &ICE_CHP_control_bldg($input->{$up_name}->{'system_type'},$zones->{'name->num'}->{'bsmt'}, 15));
+							&replace ($hse_file->{'ctl'}, '#ZONE_LINKS', 1, 1, "%s\n", '1,2,3,0');
 						}
 						else {	# tank is in main_1 zone
 
 							&insert ($hse_file->{'ctl'}, '#END_FUNCTION_DATA', 1, 0, 0, "%s", &ICE_CHP_control_bldg($input->{$up_name}->{'system_type'},$zones->{'name->num'}->{'main_3'}, 15));
+							&replace ($hse_file->{'ctl'}, '#ZONE_LINKS', 1, 1, "%s\n", '1,2,3,0,0');
 						};
-						&replace ($hse_file->{'ctl'}, '#ZONE_LINKS', 1, 1, "%s\n", '1,2,3,0');
 
 						} 
 						elsif ($zone_counter == 4) {
@@ -4498,7 +4498,7 @@ MAIN: {
 				}
 				}
 				}
-				}
+
 				else {
 				# There is a controller for each zone so the number of functions is equal to the number of zones
 					my $functions = @{$zones->{'num_order'}};
@@ -4777,15 +4777,15 @@ MAIN: {
 #Rasoul: A control function is added for ICE_CHP plant components
 
 						elsif ($up_name eq 'ICE_CHP') {
-							 if ($CSDDRD->{'heating_energy_src'} == 2 || $CSDDRD->{'heating_energy_src'} == 3 || $CSDDRD->{'heating_energy_src'} == 4) {	# if heating energy source is 2. NG, 3. oil, 4. propane 
+							# if ($CSDDRD->{'heating_energy_src'} == 2 || $CSDDRD->{'heating_energy_src'} == 3 || $CSDDRD->{'heating_energy_src'} == 4) {	# if heating energy source is 2. NG, 3. oil, 4. propane 
 							 # the control file for the ICE_CHP is hard coded be aware of component number in the pln and ctl file 
-								if ($input->{$up_name}->{'system_type'} =~ /2/) {
+								#if ($input->{$up_name}->{'system_type'} =~ /2/) {
 									&insert ($hse_file->{'ctl'},'#END_PLANT_FUNCTIONS_DATA',1, 0, 0, "%s \n%s \n%s \n", "* Plant","no plant control description supplied","8 #NUM_PLANT_LOOPS number of plant loops");
-								}
-								else {
-									&insert ($hse_file->{'ctl'},'#END_PLANT_FUNCTIONS_DATA',1, 0, 0, "%s \n%s \n%s \n", "* Plant","no plant control description supplied","8 #NUM_PLANT_LOOPS number of plant loops");
-								}
-							}
+								#}
+								#else {
+								#	&insert ($hse_file->{'ctl'},'#END_PLANT_FUNCTIONS_DATA',1, 0, 0, "%s \n%s \n%s \n", "* Plant","no plant control description supplied","8 #NUM_PLANT_LOOPS number of plant loops");
+								#}
+							#}
 							my $multiplier = $dhw_al->{'data'}{$CSDDRD->{'file_name'}.'.HDF'}->{'DHW_LpY'} / $BCD_dhw_al_ann->{'data'}->{$bcd_sdhw}->{'DHW_LpY'};
 							&insert ($hse_file->{'ctl'}, '#END_PLANT_FUNCTIONS_DATA', 1, 0, 0, "%s", &ICE_CHP_control($input->{$up_name}->{'system_type'},$CSDDRD->{'main_floor_heating_temp'},$CSDDRD->{'heating_capacity'},$input->{$up_name}->{'pump_on'},$multiplier));
 						}

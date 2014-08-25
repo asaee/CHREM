@@ -928,8 +928,9 @@ foreach my $hse_type (@hse_types) {
 						($new_data, $_) = &data_read_up ($_, $new_data, $FILEOUT);
 						if ($_ =~ /^\*data,/) { $count_total++;}
 							# examine the existance of heating system that can be replaced by ICE_CHP system
-						    if (defined ($new_data->{'heating_energy_src'})) {
-							if ($new_data->{'heating_energy_src'} == 2 || $new_data->{'heating_energy_src'} == 3 || $new_data->{'heating_energy_src'} == 4) { 
+						    if (defined ($new_data->{'heating_energy_src'} && $new_data->{'heating_equip_type'})) {
+							if (($new_data->{'heating_energy_src'} == 1 && $new_data->{'heating_equip_type'} =~ /[5|6|7]/)  || ($new_data->{'heating_energy_src'} == 5 && $new_data->{'heating_equip_type'} =~ /[3|4]/)
+							|| $new_data->{'heating_energy_src'} =~ /[2|3|4]/) { 
 							# if the heating fuel type is 2.Natural gas, 3.Oil, 4.Propane
 									$houses_ICE[$count_ICE] = $new_data->{'file_name'};
 												$count_ICE++;

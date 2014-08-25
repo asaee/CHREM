@@ -107,15 +107,15 @@ COMMAND_LINE: {
 	print "Please specify which upgrade have been applied:  \n";
 	my $list_of_upgrades = {1, "Solar domestic hot water", 2, "Window area modification", 3, "Window type modification", 
 			     4, "Fixed venetian blind", 5, "Fixed overhang", 6, "Phase change materials", 
-			     7, "Controllabe venetian blind", 8, "Photovoltaics", 9, "BIPV/T"};
-	foreach (sort keys(%{$list_of_upgrades})){
+			     7, "Controllabe venetian blind", 8, "Photovoltaics", 9, "BIPV/T", 10, "ICE_CHP"};
+	foreach (sort {$a<=>$b} (keys(%{$list_of_upgrades}))){
 		 print "$_ : ", $list_of_upgrades->{$_}, "\t";
 	}
 	print "\n";
 	$upgrade_type = <STDIN>;
 	
 	chomp ($upgrade_type);
-	if ($upgrade_type !~ /^[1-9]?$/) {die "Plase provide a number between 1 and 9 \n";}
+	if ($upgrade_type !~ /^([0-1]?[0-9])$/) {die "Plase provide a number between 1 and 10 \n";}
 	$upgrade_num_name = &upgrade_name($upgrade_type);
 	foreach my $up (values(%{$upgrade_num_name})) {
 		if ($up =~ /WTM/) {
@@ -294,6 +294,9 @@ sub collect_results_data {
 		# Otherwise continue by reading the results XML file
 		my $results_hse = XMLin($folder . "/$hse_name.xml");
 
+		my $flag_ICE_oil = 0.0;
+		my $flag_ICE_NG = 0.0;
+		print "$hse_name \n"; #, '<%6s>';
 		# Cycle over the results and filter for SCD (secondary consumption), also filter for certain zones, the '' will skip anything else
 		foreach my $key (@{&order($results_hse->{'parameter'}, ['CHREM/SCD', "CHREM/zone_0[$main_bsmt_zone_nums]/Power/(GN_Heat|GN_Cool|CD_Opaq|CD_Trans|AV_AmbVent|AV_Infil|SW_Opaq|SW_Trans)"], [''])}) {
 			# Determine the important aspects of this key's name as they will all be CHREM/SCD. But do it as a second variable so we don't affect the original structure
@@ -308,6 +311,19 @@ sub collect_results_data {
 # 					&check_add_house_result($hse_name, $key, $param, $val_type, $units, $results_hse, $results_all);
 # 				};
 # 			};
+
+			if ($key =~ /^CHREM\/SCD\/(.+)$/)
+			{
+				my $var_long  = $1;
+				if ($var_long =~ /^gen\/ICE\/src\/oil\/(\w+)$/)
+				{
+					$flag_ICE_oil = 1.0
+				}
+				elsif ($var_long =~ /^gen\/ICE\/src\/natural_gas\/(\w+)$/)
+				{
+					$flag_ICE_NG = 1.0
+				}				
+			}
 
 			# For all parameters store the integrated value - this will work for GHG and quantities, as well as energy of course
 			# It employs the same logic as above so it is not commented
@@ -326,8 +342,22 @@ sub collect_results_data {
 		if ($zones_heat > 0) {
 			$results_all->{'house_results'}->{$hse_name}->{'Zone_heat/energy/integrated'} = sprintf($units->{'GJ'}, $zones_heat);
 			$results_all->{'parameter'}->{'Zone_heat/energy/integrated'} = 'GJ';
-			$results_all->{'house_results'}->{$hse_name}->{'Heating_Sys/Calc/COP'} = sprintf($units->{'COP'}, $zones_heat / $results_all->{'house_results'}->{$hse_name}->{'use/space_heating/energy/integrated'});
-			$results_all->{'parameter'}->{'Heating_Sys/Calc/COP'} = 'COP';
+			
+			if ($flag_ICE_oil =~ 0.0 && $flag_ICE_NG =~ 0.0)
+			{
+				$results_all->{'house_results'}->{$hse_name}->{'Heating_Sys/Calc/COP'} = sprintf($units->{'COP'}, $zones_heat / $results_all->{'house_results'}->{$hse_name}->{'use/space_heating/energy/integrated'});
+				$results_all->{'parameter'}->{'Heating_Sys/Calc/COP'} = 'COP';
+			}
+			elsif ($flag_ICE_oil =~ 1.0)
+			{
+				$results_all->{'house_results'}->{$hse_name}->{'Heating_Sys/Calc/COP'} = sprintf($units->{'COP'}, $zones_heat / $results_all->{'house_results'}->{$hse_name}->{'gen/ICE/src/oil/energy/integrated'});
+				$results_all->{'parameter'}->{'Heating_Sys/Calc/COP'} = 'COP';
+			}
+			elsif ($flag_ICE_NG =~ 1.0)
+			{
+				$results_all->{'house_results'}->{$hse_name}->{'Heating_Sys/Calc/COP'} = sprintf($units->{'COP'}, $zones_heat / $results_all->{'house_results'}->{$hse_name}->{'gen/ICE/src/natural_gas/energy/integrated'});
+				$results_all->{'parameter'}->{'Heating_Sys/Calc/COP'} = 'COP';
+			}
 			
 			# Check the Heating COP range
 			if ($results_all->{'house_results'}->{$hse_name}->{'Heating_Sys/Calc/COP'} > 7 || $results_all->{'house_results'}->{$hse_name}->{'Heating_Sys/Calc/COP'} < 0.15) {
@@ -338,7 +368,7 @@ sub collect_results_data {
 				next FOLDER;  # Jump to the next house if it does not return a true.
 			};
 		};
-		if ($zones_cool < 0) {
+		if ($zones_cool < 0 && ($flag_ICE_oil =~ 0.0 && $flag_ICE_NG =~ 0.0)) {
 			$zones_cool = - $zones_cool; # Take negative of cooling so it is a positive number
 			$results_all->{'house_results'}->{$hse_name}->{'Zone_cool/energy/integrated'} = sprintf($units->{'GJ'}, $zones_cool);
 			$results_all->{'parameter'}->{'Zone_cool/energy/integrated'} = 'GJ';
