@@ -84,6 +84,7 @@ sub upgrade_name {
 			case (8) {$name_up->{$up} ='PV';}	# photovoltaic
 			case (9) {$name_up->{$up} ='BIPVT';}	# building integrated photovoltaic / thermal
 			case (10) {$name_up->{$up} ='ICE_CHP';}	# ICE based co-generation system
+			case (11) {$name_up->{$up} ='SE_CHP';}	# SE based co-generation system
 		}
 	};
       return ($name_up);
@@ -462,7 +463,7 @@ sub input_upgrade {
 		elsif ($list->{$up} eq 'BIPVT') {
 		}
 #Rasoul: Add input data for ICE_CHP
-		elsif ($list->{$up} eq 'ICE_CHP') {
+		elsif ($list->{$up} eq 'ICE_CHP' || $list->{$up} eq 'SE_CHP') {
 			$input->{$list->{$up}}= &cross_ref_up('../Input_upgrade/Input_'.$list->{$up}.'.csv');	# create an input reference crosslisting hash
 			# read the SDHW system type (it can be 2, 3 or 4) according to Haddad paper and ESP-r exemplar
 			unless ($input->{$list->{$up}}->{'system_type'} =~ /[2-4]/) {

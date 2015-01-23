@@ -79,13 +79,13 @@ while (<$FILE_INPUT>) {
 	$_ = rm_EOL_and_trim($_); # Clean up the folder name
 	$_ =~ /^\.\.\/\S+\/\S+\/(\w{10})$/;
 	my $house_name = $1;  
-	my $file_core = grep (/core/, <$_/*>);
+	my $file_core = grep (/core/, <$_/*/>);
 	chdir ($_);
 	
-	if ((!-e ($house_name.'.temperature')) || (-e $house_name.'.res')) {
+	if ((!-e ($house_name.'temperature')) || (-e $house_name.'.res')) {
 		my $bps_size = 0;
 		$bps_size = -s "$house_name.bps";
-		if ($bps_size > 0) {
+		if (defined($bps_size) && $bps_size > 0) {
 			print $FILE_OUTPUT "$_ \n";
 		}
 	}

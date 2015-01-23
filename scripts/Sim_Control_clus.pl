@@ -8,8 +8,8 @@
 #
 #
 # INPUT USE:
-# filename.pl [house type numbers seperated by "/"] [region numbers seperated by "/"; 0 means all] [set_name] 
-# Use start and end cores to evenly divide the houses between two machines (e.g. QC2 would be [16/9/16])
+# filename.pl [house type numbers seperated by "/"] [region numbers seperated by "/"; 0 means all] [set_name] [desired houses]
+#
 #
 # DESCRIPTION:
 # This script divides the desired house simulations up to match the CPU cores 

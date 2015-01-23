@@ -107,7 +107,7 @@ COMMAND_LINE: {
 	print "Please specify which upgrade have been applied:  \n";
 	my $list_of_upgrades = {1, "Solar domestic hot water", 2, "Window area modification", 3, "Window type modification", 
 			     4, "Fixed venetian blind", 5, "Fixed overhang", 6, "Phase change materials", 
-			     7, "Controllabe venetian blind", 8, "Photovoltaics", 9, "BIPV/T", 10, "ICE_CHP"};
+			     7, "Controllabe venetian blind", 8, "Photovoltaics", 9, "BIPV/T", 10, "ICE_CHP", 11, "SE_CHP"};
 	foreach (sort {$a<=>$b} (keys(%{$list_of_upgrades}))){
 		 print "$_ : ", $list_of_upgrades->{$_}, "\t";
 	}

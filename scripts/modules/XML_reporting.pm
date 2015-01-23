@@ -645,11 +645,11 @@ sub GHG_conversion {
 					my $per_sum = 0;
 					foreach my $period (@{&order($parameters->{$key}, [], [qw(units P00 description)])}) {
 						my $mult;
-						if (defined($en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{$period}->{'GHGIFavg'})) {
-							$mult = $en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{$period}->{'GHGIFavg'};
+						if (defined($en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{$period}->{'GHGIFmarginal'})) {
+							$mult = $en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{$period}->{'GHGIFmarginal'};
 						}
 						else {
-							$mult = $en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{'P00_Period'}->{'GHGIFavg'};
+							$mult = $en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{'P00_Period'}->{'GHGIFmarginal'};
 						};
 # 						print "En src mult $mult\n";
 # 						print Dumper $en_srcs;
@@ -676,11 +676,11 @@ sub GHG_conversion {
 					my $per_sum = 0;
 					foreach my $period (@{&order($parameters->{$key}, [], [qw(units P00 description)])}) {
 						my $mult;
-						if (defined($en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{$period}->{'GHGIFavg'})) {
-							$mult = $en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{$period}->{'GHGIFavg'};
+						if (defined($en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{$period}->{'GHGIFmarginal'})) {
+							$mult = $en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{$period}->{'GHGIFmarginal'};
 						}
 						else {
-							$mult = $en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{'P00_Period'}->{'GHGIFavg'};
+							$mult = $en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'period'}->{'P00_Period'}->{'GHGIFmarginal'};
 						};
 # 						print "En src mult $mult\n";
 # 						print Dumper $en_srcs;

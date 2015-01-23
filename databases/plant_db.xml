@@ -264,6 +264,115 @@ This file holds values related to plant components for ESP-r-->
 		<comp_data number="103" description="Performance map: Combustion air correlation coefficient d2 ( 1 /" amount="2"/>
 	</component>
 	
+	<component name="Stirling_engine" description="Annex 42 model for Stirling CHP systems" comp_num="69" num_control="2" cont_data="0.00000 1.0000000" num_data="106"  elec_data="5">
+		<comp_data number="1" description="System maximum power (W)" amount="1000"/>
+		<comp_data number="2" description="System minimum power (W)" amount="0.0000"/>  
+		<comp_data number="3" description="Maximum cooling water outlet temp (oC)" amount="100.00"/>                         
+		<comp_data number="4" description="Fuel type (1: liquid fuel, 2: gaseous mixture)" amount="1.0000"/>                 
+		<comp_data number="5" description="Liquid fuel heating value  (J/kg):" amount="0.46000E+08"/>                              
+		<comp_data number="6" description="Liquid fuel CO2 factor (kg CO2 / kg fuel):" amount="3.2400"/>                      
+		<comp_data number="7" description="% hydrogen in fuel gas mixture (mol/mol)" amount="0.0000"/>                       
+		<comp_data number="8" description="% methane in fuel gas mixture (mol/mol)" amount="0.95000"/>                        
+		<comp_data number="9" description="% ethane in fuel gas mixture (mol/mol)" amount="0.32000E-01"/>                         
+		<comp_data number="10" description="% propane in fuel gas mixture (mol/mol)" amount="0.20000E-02"/>                        
+		<comp_data number="11" description="% butane in fuel gas mixture (mol/mol)" amount="0.60000E-03"/>                         
+		<comp_data number="12" description="% pentane in fuel gas mixture (mol/mol)" amount="0.20000E-03"/>                        
+		<comp_data number="13" description="% hexane in fuel gas mixture (mol/mol)" amount="0.0000"/>                         
+		<comp_data number="14" description="% methanol in fuel gas mixture (mol/mol)" amount="0.0000"/>                       
+		<comp_data number="15" description="% ethanol  in fuel gas mixture (mol/mol)" amount="0.0000"/>                       
+		<comp_data number="16" description="% carbon monoxide in fuel gas mixture (mol/mol)" amount="0.0000"/>                
+		<comp_data number="17" description="% carbon dioxide in fuel gas mixture (mol/mol)" amount="0.50000E-02"/>                 
+		<comp_data number="18" description="% nitrogen in fuel gas mixture (mol/mol)" amount="0.10000E-01"/>                       
+		<comp_data number="19" description="% oxygen in fuel gas mixture (mol/mol)" amount="0.20000E-03"/>                         
+		<comp_data number="20" description="Max rate of change in fuel flow (kg/s^2)" amount="-1.0000"/>                       
+		<comp_data number="21" description="Max rate of change in power output (W/s)" amount="-1.0000"/>                       
+		<comp_data number="22" description="Power system thermal mass (J/K)" amount="1.00000E+05"/>                                
+		<comp_data number="23" description="Effective heat recovery UA coefficient (W/K)" amount="100.00"/>                   
+		<comp_data number="24" description="Effective heat loss UA coefficient (W/K)" amount="0.65000"/>                       
+		<comp_data number="25" description="Heat exchanger thermal mass (J/K)" amount="0.20000E+05"/>                              
+		<comp_data number="26" description="Nominal engine temperature (oC)" amount="70.00"/>                                
+		<comp_data number="27" description="Fuel flow sensitivity to engine temp (-)" amount="1.0000"/>                       
+		<comp_data number="28" description="Electric output sensitivity to engine temp (-)" amount="1.0000"/>                 
+		<comp_data number="29" description="Ratio of maximum flow in startup SS value (-)" amount="10.000"/>                  
+		<comp_data number="30" description="Cool down period duration (s)" amount="822.00"/>                                  
+		<comp_data number="31" description="Cool-down period mode (1: Mandatory, 2: optional)" amount="1.0000"/>              
+		<comp_data number="32" description="Electric output at cool-down (W)" amount="20.0000"/>                               
+		<comp_data number="33" description="Net electrical output in standby mode (W)" amount="-10.000"/>                      
+		<comp_data number="34" description="Power output correlation minimum bound (W)" amount="0.0000"/>                     
+		<comp_data number="35" description="Power output correlation maximum bound (W)" amount="10000.0"/>                     
+		<comp_data number="36" description="Cooling water temperature correlation minimum bound (oC)" amount="0.0000"/>       
+		<comp_data number="37" description="Cooling water temperature correlation maximum bound (oC)" amount="100.00"/>       
+		<comp_data number="38" description="Cooling water flow correlation minimum bound (kg/s)" amount="0.0000"/>            
+		<comp_data number="39" description="Cooling water flow correlation maximum bound (kg/s)" amount="100.00"/>             
+		<comp_data number="40" description="Performance map: Elec. efficiency correlation coeff. a0" amount="0.31000"/>         
+		<comp_data number="41" description="Performance map: Elec. efficiency correlation coeff. a1" amount="0.0000"/>         
+		<comp_data number="42" description="Performance map: Elec. efficiency correlation coeff. a2" amount="0.0000"/>         
+		<comp_data number="43" description="Performance map: Elec. efficiency correlation coeff. a3" amount="0.0000"/>         
+		<comp_data number="44" description="Performance map: Elec. efficiency correlation coeff. a4" amount="0.0000"/>         
+		<comp_data number="45" description="Performance map: Elec. efficiency correlation coeff. a5" amount="0.0000"/>         
+		<comp_data number="46" description="Performance map: Elec. efficiency correlation coeff. a6" amount="0.0000"/>         
+		<comp_data number="47" description="Performance map: Elec. efficiency correlation coeff. a7" amount="0.0000"/>         
+		<comp_data number="48" description="Performance map: Elec. efficiency correlation coeff. a8" amount="0.0000"/>         
+		<comp_data number="49" description="Performance map: Elec. efficiency correlation coeff. a9" amount="0.0000"/>         
+		<comp_data number="50" description="Performance map: Elec. efficiency correlation coeff. a10" amount="0.0000"/>        
+		<comp_data number="51" description="Performance map: Elec. efficiency correlation coeff. a11" amount="0.0000"/>        
+		<comp_data number="52" description="Performance map: Elec. efficiency correlation coeff. a12" amount="0.0000"/>        
+		<comp_data number="53" description="Performance map: Elec. efficiency correlation coeff. a13" amount="0.0000"/>        
+		<comp_data number="54" description="Performance map: Elec. efficiency correlation coeff. a14" amount="0.0000"/>        
+		<comp_data number="55" description="Performance map: Elec. efficiency correlation coeff. a15" amount="0.0000"/>        
+		<comp_data number="56" description="Performance map: Elec. efficiency correlation coeff. a16" amount="0.0000"/>        
+		<comp_data number="57" description="Performance map: Elec. efficiency correlation coeff. a17" amount="0.0000"/>        
+		<comp_data number="58" description="Performance map: Elec. efficiency correlation coeff. a18" amount="0.0000"/>        
+		<comp_data number="59" description="Performance map: Elec. efficiency correlation coeff. a19" amount="0.0000"/>        
+		<comp_data number="60" description="Performance map: Elec. efficiency correlation coeff. a20" amount="0.0000"/>        
+		<comp_data number="61" description="Performance map: Elec. efficiency correlation coeff. a21" amount="0.0000"/>        
+		<comp_data number="62" description="Performance map: Elec. efficiency correlation coeff. a22" amount="0.0000"/>        
+		<comp_data number="63" description="Performance map: Elec. efficiency correlation coeff. a23" amount="0.0000"/>        
+		<comp_data number="64" description="Performance map: Elec. efficiency correlation coeff. a24" amount="0.0000"/>        
+		<comp_data number="65" description="Performance map: Elec. efficiency correlation coeff. a25" amount="0.0000"/>        
+		<comp_data number="66" description="Performance map: Elec. efficiency correlation coeff. a26" amount="0.0000"/>        
+		<comp_data number="67" description="Performance map: Themal efficiency correlation coeff. b0" amount="0.58000"/>        
+		<comp_data number="68" description="Performance map: Themal efficiency correlation coeff. b1" amount="0.0000"/>        
+		<comp_data number="69" description="Performance map: Themal efficiency correlation coeff. b2" amount="0.0000"/>        
+		<comp_data number="70" description="Performance map: Themal efficiency correlation coeff. b3" amount="0.0000"/>        
+		<comp_data number="71" description="Performance map: Themal efficiency correlation coeff. b4" amount="0.0000"/>        
+		<comp_data number="72" description="Performance map: Themal efficiency correlation coeff. b5" amount="0.0000"/>        
+		<comp_data number="73" description="Performance map: Themal efficiency correlation coeff. b6" amount="0.0000"/>        
+		<comp_data number="74" description="Performance map: Themal efficiency correlation coeff. b7" amount="0.0000"/>        
+		<comp_data number="75" description="Performance map: Themal efficiency correlation coeff. b8" amount="0.0000"/>        
+		<comp_data number="76" description="Performance map: Themal efficiency correlation coeff. b9" amount="0.0000"/>        
+		<comp_data number="77" description="Performance map: Themal efficiency correlation coeff. b10" amount="0.0000"/>       
+		<comp_data number="78" description="Performance map: Themal efficiency correlation coeff. b11" amount="0.0000"/>       
+		<comp_data number="79" description="Performance map: Themal efficiency correlation coeff. b12" amount="0.0000"/>       
+		<comp_data number="80" description="Performance map: Themal efficiency correlation coeff. b13" amount="0.0000"/>       
+		<comp_data number="81" description="Performance map: Themal efficiency correlation coeff. b14" amount="0.0000"/>       
+		<comp_data number="82" description="Performance map: Themal efficiency correlation coeff. b15" amount="0.0000"/>       
+		<comp_data number="83" description="Performance map: Themal efficiency correlation coeff. b16" amount="0.0000"/>       
+		<comp_data number="84" description="Performance map: Themal efficiency correlation coeff. b17" amount="0.0000"/>       
+		<comp_data number="85" description="Performance map: Themal efficiency correlation coeff. b18" amount="0.0000"/>       
+		<comp_data number="86" description="Performance map: Themal efficiency correlation coeff. b19" amount="0.0000"/>       
+		<comp_data number="87" description="Performance map: Themal efficiency correlation coeff. b20" amount="0.0000"/>       
+		<comp_data number="88" description="Performance map: Themal efficiency correlation coeff. b21" amount="0.0000"/>       
+		<comp_data number="89" description="Performance map: Themal efficiency correlation coeff. b22" amount="0.0000"/>       
+		<comp_data number="90" description="Performance map: Themal efficiency correlation coeff. b23" amount="0.0000"/>       
+		<comp_data number="91" description="Performance map: Themal efficiency correlation coeff. b24" amount="0.0000"/>       
+		<comp_data number="92" description="Performance map: Themal efficiency correlation coeff. b25" amount="0.0000"/>       
+		<comp_data number="93" description="Performance map: Themal efficiency correlation coeff. b26" amount="0.0000"/>       
+		<comp_data number="94" description="Cooling water loop: pump configuration (1= internal, 2= external" amount="2.0000"/>
+		<comp_data number="95" description="Performance map: cooling water flow correlation coeff. c0" amount="0.0000"/>       
+		<comp_data number="96" description="Performance map: cooling water flow correlation coeff. c1" amount="0.0000"/>       
+		<comp_data number="97" description="Performance map: cooling water flow correlation coeff. c2" amount="0.0000"/>       
+		<comp_data number="98" description="Performance map: cooling water flow correlation coeff. c3" amount="0.0000"/>       
+		<comp_data number="99" description="Performance map: cooling water flow correlation coeff. c4" amount="0.0000"/>       
+		<comp_data number="100" description="Performance map: cooling water flow correlation coeff. c5" amount="0.0000"/>       
+		<comp_data number="101" description="Performance map: cooling water flow correlation coeff. c6" amount="0.0000"/>       
+		<comp_data number="102" description="Performance map: cooling water flow correlation coeff. c7" amount="0.0000"/>       
+		<comp_data number="103" description="Performance map: cooling water flow correlation coeff. c8" amount="0.0000"/>       
+		<comp_data number="104" description="Performance map: Combustion air correlation coefficient d0 (kg/s" amount="0.0000"/>
+		<comp_data number="105" description="Performance map: Combustion air correlation coefficient d1 (-)" amount="0.0000"/> 
+		<comp_data number="106" description="Performance map: Combustion air correlation coefficient d2 ( 1 /" amount="0.0000"/>
+	</component>
+	
 <!-- WATER HEATING -->
 	<component name="pump" description="variable speed domestic WCH pump; 1 node model" comp_num="15" num_control="1" cont_data="2.0000000E-05" num_data="6"  elec_data="5">
 		<comp_data number="1" description="Component total mass (kg)" amount="3.4000"/>
