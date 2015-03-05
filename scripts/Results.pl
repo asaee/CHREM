@@ -307,6 +307,12 @@ sub collect_results_data {
 			if ($key =~ /zone_\d\d\/GN_Heat\/energy/) {$zones_heat = $zones_heat + $results_all->{'house_results'}->{$hse_name}->{$key}}
 			elsif ($key =~ /zone_\d\d\/GN_Cool\/energy/) {$zones_cool = $zones_cool + $results_all->{'house_results'}->{$hse_name}->{$key}};
 		};
+		
+		my $main_heat = 0;
+		my $aux_heat = 0;
+		if ($results_all->{'house_results'}->{$hse_name}->{'use/condensing_boiler/src/natural_gas/energy/integrated'}) {$aux_heat = $aux_heat + $results_all->{'house_results'}->{$hse_name}->{'use/condensing_boiler/src/natural_gas/energy/integrated'}};
+		if ($results_all->{'house_results'}->{$hse_name}->{'use/non_condensing_boiler/src/oil/energy/integrated'}) {$aux_heat = $aux_heat + $results_all->{'house_results'}->{$hse_name}->{'use/non_condensing_boiler/src/oil/energy/integrated'}};
+		if ($results_all->{'house_results'}->{$hse_name}->{'use/space_heating/energy/integrated'}) {$main_heat = $main_heat + $results_all->{'house_results'}->{$hse_name}->{'use/space_heating/energy/integrated'}};
 
 		if ($zones_heat > 0) {
 			$results_all->{'house_results'}->{$hse_name}->{'Zone_heat/energy/integrated'} = sprintf($units->{'GJ'}, $zones_heat);
@@ -314,7 +320,7 @@ sub collect_results_data {
 			
 			if ($flag_ICE_oil =~ 0.0 && $flag_ICE_NG =~ 0.0)
 			{
-				$results_all->{'house_results'}->{$hse_name}->{'Heating_Sys/Calc/COP'} = sprintf($units->{'COP'}, $zones_heat / $results_all->{'house_results'}->{$hse_name}->{'use/space_heating/energy/integrated'});
+				$results_all->{'house_results'}->{$hse_name}->{'Heating_Sys/Calc/COP'} = sprintf($units->{'COP'}, $zones_heat / ($main_heat + $aux_heat));
 				$results_all->{'parameter'}->{'Heating_Sys/Calc/COP'} = 'COP';
 			}
 			elsif ($flag_ICE_oil =~ 1.0)

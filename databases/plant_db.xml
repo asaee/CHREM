@@ -408,6 +408,22 @@ This file holds values related to plant components for ESP-r-->
 		<comp_data number="13" description="Weighting factor 2nd wall when defining Te (-)" amount="0.0000"/>
 	</component>
 	
+	<component name="low_temp_radiator" description="domestic hot water radiator VO ~ 2 m^2; 2 node model" comp_num="12" num_control="0" num_data="13"   elec_data="0">
+		<comp_data number="1" description="Component total mass (kg)" amount="49.000"/>
+		<comp_data number="2" description="Mass weighted average specific heat (J/kgK)" amount="1350.00"/>
+		<comp_data number="3" description="Radiator exponent (-)" amount="1.300"/>
+		<comp_data number="4" description="Nominal heat emission of radiator (W)" amount="967.0"/>
+		<comp_data number="5" description="Nominal supply temperature (C)" amount="55.000"/>
+		<comp_data number="6" description="Nominal exit temperature (C)" amount="35.000"/>
+		<comp_data number="7" description="Nominal environment temperature (C)" amount="21.000"/>
+		<comp_data number="8" description="Index of coupled building zone (-)" amount="0.0000"/>
+		<comp_data number="9" description="Number of walls used for defining Te (-)" amount="0.0000"/>
+		<comp_data number="10" description="Index of 1st wall for defining Te (-)" amount="0.0000"/>
+		<comp_data number="11" description="Weighting factor 1st wall when defining Te (-)" amount="0.0000"/>
+		<comp_data number="12" description="Index of 2nd wall for defining Te (-)" amount="0.0000"/>
+		<comp_data number="13" description="Weighting factor 2nd wall when defining Te (-)" amount="0.0000"/>
+	</component>
+
 	<component name="flow_converging" description="WCH pipe converging multi-leg junction; 1 node model" comp_num="100" num_control="0" num_data="4"   elec_data="0">
 		<comp_data number="1" description="Component total mass (kg)" amount="0.10000"/>
 		<comp_data number="2" description="Mass weighted average specific heat (J/kgK)" amount="2250.0"/>
@@ -444,20 +460,55 @@ This file holds values related to plant components for ESP-r-->
 	</component>
 	
 	<component name="cond-boiler" description="condensing boilerONOFF cont;2 node model" comp_num="16" num_control="1" cont_data="0.00" num_data="12"   elec_data="0">
-		<comp_data number="1" description="Component total mass (kg)" amount="50.000"/>                                      
+		<comp_data number="1" description="Component total mass (kg)" amount="500.000"/>                                      
 		<comp_data number="2" description="Mass weighted average specific heat (J/kgK)" amount="1000.0"/>
 		<comp_data number="3" description="Full load gas firing rate if boiler on (m^3/s)" amount="0.28600E-04"/>                  
 		<comp_data number="4" description="Stand-by gas consumption relative to 1 (-)" amount="0.10000E-01"/>                      
 		<comp_data number="5" description="Gas heating value at STP (J/m^3)" amount="0.38000E+08"/>                                
-		<comp_data number="6" description="Full load water sided efficiency at Tc (-)" amount="0.86000"/>                      
-		<comp_data number="7" description="Tangent of efficiency curve for Tj .LE. Tc (1/K)" amount="0.25000E-02"/>                   
-		<comp_data number="8" description="Tangent of efficiency curve for Tj > Tc (1/K)" amount="0.25000E-03"/>                   
+		<comp_data number="6" description="Full load water sided efficiency at Tc (-)" amount="0.92000"/>                      
+		<comp_data number="7" description="Tangent of efficiency curve for Tj .LE. Tc (1/K)" amount="-0.25000"/>                   
+		<comp_data number="8" description="Tangent of efficiency curve for Tj > Tc (1/K)" amount="-0.15000"/>                   
 		<comp_data number="9" description="Stand-by loss at Tj = Te relative to 1 (-)" amount="0.0000"/>                      
 		<comp_data number="10" description="Tangent of stand-by loss curve (1/K)" amount="0.000"/>                            
-		<comp_data number="11" description="Normalized start-stop loss (s)" amount="1.0000"/>                                  
+		<comp_data number="11" description="Normalized start-stop loss (s)" amount="5.0000"/>                                  
 		<comp_data number="12" description="Upper boiler temperature limit (C)" amount="95.000"/>     
-	</component>		
+	</component>
 	
+	<component name="non_cond-boiler" description="condensing boilerONOFF cont;2 node model" comp_num="16" num_control="1" cont_data="0.00" num_data="12"   elec_data="0">
+		<comp_data number="1" description="Component total mass (kg)" amount="500.000"/>                                      
+		<comp_data number="2" description="Mass weighted average specific heat (J/kgK)" amount="1000.0"/>
+		<comp_data number="3" description="Full load gas firing rate if boiler on (m^3/s)" amount="0.28600E-04"/>                  
+		<comp_data number="4" description="Stand-by gas consumption relative to 1 (-)" amount="0.10000E-01"/>                      
+		<comp_data number="5" description="Gas heating value at STP (J/m^3)" amount="0.386400E+11"/>                                
+		<comp_data number="6" description="Full load water sided efficiency at Tc (-)" amount="0.8500"/>                      
+		<comp_data number="7" description="Tangent of efficiency curve for Tj .LE. Tc (1/K)" amount="-0.15000"/>                   
+		<comp_data number="8" description="Tangent of efficiency curve for Tj > Tc (1/K)" amount="-0.15000"/>                   
+		<comp_data number="9" description="Stand-by loss at Tj = Te relative to 1 (-)" amount="0.0000"/>                      
+		<comp_data number="10" description="Tangent of stand-by loss curve (1/K)" amount="0.000"/>                            
+		<comp_data number="11" description="Normalized start-stop loss (s)" amount="5.0000"/>                                  
+		<comp_data number="12" description="Upper boiler temperature limit (C)" amount="95.000"/>     
+	</component>
+
+<!--	<component name="non_cond-boiler" description="non-condensing boiler- aquastat control; 2 node IEA Annex X model" comp_num="17" num_control="2" cont_data="60.0 0.0" num_data="17"   elec_data="0">
+		<comp_data number="1" description="Component total mass (kg)" amount="225.00"/>                                       
+		<comp_data number="2" description="Mass weighted average specific heat (J/kgK)" amount="951.00"/>                     
+		<comp_data number="3" description="fuel mass flow rate (kg/s)" amount="0.63030E-03"/>                                      
+		<comp_data number="4" description="volumetric ratio of CO2 in flue gases during operation (-)" amount="0.13600"/>      
+		<comp_data number="5" description="heat exchange coefficient water/flue gases in nominal conditions" amount="34.280"/>
+		<comp_data number="6" description="sensitivity coefficient for 3 (-)" amount="0.50000"/>                               
+		<comp_data number="7" description="sensitivity coefficient for 3 (-)" amount="0.50000E-02"/>                               
+		<comp_data number="8" description="heat loss to the environment if OFF (W/K)" amount="4.2080"/>                       
+		<comp_data number="9" description="heat loss increase to environment if ON (W/K)" amount="9.7920"/>                   
+		<comp_data number="10" description="weighting factor for defining mean water temperature (-)" amount="0.50000"/>        
+		<comp_data number="11" description="fuel nominal mass flow rate (kg/s)" amount="0.63030E-03"/>                              
+		<comp_data number="12" description="water nominal mass flow rate (kg/s)" amount="1.6240"/>                             
+		<comp_data number="13" description="nominal ratio of CO2 in flue gases (-)" amount="0.13600"/>                          
+		<comp_data number="14" description="coefficient for defining specific heat flue gases (J/kgK)" amount="3294.0"/>       
+		<comp_data number="15" description="coefficient for defining specific heat flue gases (J/kgK)" amount="2105.0"/>       
+		<comp_data number="16" description="fuel specific heat (J/kgK)" amount="1880.0"/>                                      
+		<comp_data number="17" description="fuel heating value (J/kg)" amount="0.46E+08"/>
+	</component>   -->
+		
 	<component name="strat_tank" description="Stratified tank with up to 100 layers; 2 node model" comp_num="89" num_control="0" num_data="13"   elec_data="0">
 		<comp_data number="1" description="Tank volume (m3)" amount="16.457"/>                                                
 		<comp_data number="2" description="Tank height (m)" amount="1.8000"/>                                                 
@@ -472,6 +523,12 @@ This file holds values related to plant components for ESP-r-->
 		<comp_data number="11" description="Internal time steps per simulation time step" amount="5.0000"/>                    
 		<comp_data number="12" description="Initial temperature of tank (C)" amount="20.000"/>                                 
 		<comp_data number="13" description="Boiling temperature of fluid (C)" amount="100.00"/> 
+	</component>
+	
+	<component name="3way-Valve" description="WCH 3-port valve; 3 node model; flow divert control" comp_num="112" num_control="1" cont_data="0.00" num_data="3"   elec_data="0">
+		<comp_data number="1" description="Component total mass (kg)" amount="1.000"/>                                                
+		<comp_data number="2" description="Mass weighted average specific heat (J/kgK)" amount="500.00"/>                                                 
+		<comp_data number="3" description="UA modulus (W/K)" amount="0.0200"/>
 	</component>
 	
 </plant_components>
