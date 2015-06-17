@@ -804,8 +804,8 @@ sub organize_xml_log_tree {
 				if ($key_2 =~ /src|use|Power/) {
 					my @key_power = keys %{$par->{$key_2}};
 					foreach my $key_3 (@key_power){
-						#print "$key_2.$key_3";
-						#print "$key_3";
+						#print "$key_2.$key_3 \n";
+						#print "$key_3 \n";
 						unless ($key_3 =~ /energy|quantity|net_balance|onsite_generation|name/){
 							if ($key_2 !~ /Power/) {
 								my @last_key = keys %{$par->{$key_2}->{$key_3}};

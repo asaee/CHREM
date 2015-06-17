@@ -7002,10 +7002,10 @@ MAIN: {
 							if ($CSDDRD->{'ceiling_flat_type'} == 2) { # Attic-Gable
 								$avail_roof_area = 0.9 * ($last_zone_area / (2 * 0.707)); # Cos 45 = 0.707
 							}
-							elsif ($CSDDRD->{'ceiling_flat_type'} == 2) { # Attic-Hip
+							elsif ($CSDDRD->{'ceiling_flat_type'} == 3) { # Attic-Hip
 								$avail_roof_area = 0.8 * ($last_zone_area / (3 * 0.707)); # Cos 45 = 0.707
 							}
-							elsif ($CSDDRD->{'ceiling_flat_type'} == 2) { # Attic-Hip
+							elsif ($CSDDRD->{'ceiling_flat_type'} == 5) { # Flat roof
 								$avail_roof_area = 0.5 * $last_zone_area;
 							}
 							# As mentioned in the reference the collectors are asssembled in an array, each array has N number of loops and each loop include 3 flat plate
@@ -8076,8 +8076,8 @@ MAIN: {
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-5        1     3     pump_tank         1    $par_flow_loop_5                 #  27");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-6        1     3     pump_tank         1    $par_flow_loop_6                 #  28");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-7        1     3     pump_tank         1    $par_flow_loop_7                 #  29");
-										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-6        1     3     pump_tank         1    $par_flow_loop_8                 #  30");
-										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-7        1     3     pump_tank         1    $par_flow_loop_9                 #  31");
+										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-8        1     3     pump_tank         1    $par_flow_loop_8                 #  30");
+										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-9        1     3     pump_tank         1    $par_flow_loop_9                 #  31");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-4        1    1.000                 # 32');
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-5        1    1.000                 # 33');
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-6        1    1.000                 # 34');
@@ -8136,8 +8136,8 @@ MAIN: {
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-5        1     3     pump_tank         1    $par_flow_loop_5                 #  30");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-6        1     3     pump_tank         1    $par_flow_loop_6                 #  31");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-7        1     3     pump_tank         1    $par_flow_loop_7                 #  32");
-										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-6        1     3     pump_tank         1    $par_flow_loop_8                 #  33");
-										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-7        1     3     pump_tank         1    $par_flow_loop_9                 #  34");
+										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-8        1     3     pump_tank         1    $par_flow_loop_8                 #  33");
+										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-9        1     3     pump_tank         1    $par_flow_loop_9                 #  34");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-4        1    1.000                 # 35');
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-5        1    1.000                 # 36');
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-6        1    1.000                 # 37');
@@ -8199,8 +8199,8 @@ MAIN: {
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-5        1     3     pump_tank         1    $par_flow_loop_5                 #  32");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-6        1     3     pump_tank         1    $par_flow_loop_6                 #  33");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-7        1     3     pump_tank         1    $par_flow_loop_7                 #  34");
-										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-6        1     3     pump_tank         1    $par_flow_loop_8                 #  35");
-										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-7        1     3     pump_tank         1    $par_flow_loop_9                 #  36");
+										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-8        1     3     pump_tank         1    $par_flow_loop_8                 #  35");
+										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-9        1     3     pump_tank         1    $par_flow_loop_9                 #  36");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-4        1    1.000                 # 37');
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-5        1    1.000                 # 38');
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-6        1    1.000                 # 39');
@@ -8265,8 +8265,8 @@ MAIN: {
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-5        1     3     pump_tank         1    $par_flow_loop_5                 #  34");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-6        1     3     pump_tank         1    $par_flow_loop_6                 #  35");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-7        1     3     pump_tank         1    $par_flow_loop_7                 #  36");
-										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-6        1     3     pump_tank         1    $par_flow_loop_8                 #  37");
-										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-7        1     3     pump_tank         1    $par_flow_loop_9                 #  38");
+										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-8        1     3     pump_tank         1    $par_flow_loop_8                 #  37");
+										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", "FPC_loop-9        1     3     pump_tank         1    $par_flow_loop_9                 #  38");
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-4        1    1.000                 # 39');
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-5        1    1.000                 # 40');
 										&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'FC-Solar          1     3     FPC_loop-6        1    1.000                 # 41');

@@ -1039,7 +1039,7 @@ foreach my $hse_type (@hse_types) {
 												print $FILEOUT "$_ \n";
 											}
 										}
-										if ($new_data->{'front_orientation'} == 1 || $new_data->{'front_orientation'} == 5) { # Front orientation 1-South or 5-North
+										elsif ($new_data->{'front_orientation'} == 1 || $new_data->{'front_orientation'} == 5) { # Front orientation 1-South or 5-North
 											if (($width->{'main_1'} > $depth) && ($w_d_ratio != 1)) {
 												$houses_SCS[$count_SCS] = $new_data->{'file_name'};
 												$count_SCS++;
@@ -1058,7 +1058,7 @@ foreach my $hse_type (@hse_types) {
 							}
 							# The row houses are attached from right or left or both. So front and back are always detached
 							# in this case the x is always front so the ridgeline never go east -west in case of east and west orientation
-							elsif ($new_data->{'ceiling_flat_type'} == 2 && $new_data->{'attachment_type'} > 1) { # Attic/Gable -- Row Middle or End
+							elsif ($new_data->{'ceiling_flat_type'} == 2 && $new_data->{'attachment_type'} != 1) { # Attic/Gable -- Row Middle or End
 								unless ($new_data->{'front_orientation'} == 3 || $new_data->{'front_orientation'} == 7) {
 									if (defined ($new_data->{'heating_energy_src'} && $new_data->{'heating_equip_type'})) {
 										if (($new_data->{'heating_energy_src'} == 1 && $new_data->{'heating_equip_type'} =~ /[5|6|7]/)  || ($new_data->{'heating_energy_src'} == 5 && $new_data->{'heating_equip_type'} =~ /[3|4]/)
@@ -1071,7 +1071,7 @@ foreach my $hse_type (@hse_types) {
 									}
 								}
 							}
-							elsif ($new_data->{'ceiling_flat_type'} == 3 && $new_data->{'attachment_type'} > 1) { # Attic/Hip -- Row End NOTE: middle house never exist with hip
+							elsif ($new_data->{'ceiling_flat_type'} == 3 && $new_data->{'attachment_type'} != 1) { # Attic/Hip -- Row End NOTE: middle house never exist with hip
 								if (($width->{$last_zone} * 2 / 3) >= 4 ){
 									if (defined ($new_data->{'heating_energy_src'} && $new_data->{'heating_equip_type'})) {
 										if (($new_data->{'heating_energy_src'} == 1 && $new_data->{'heating_equip_type'} =~ /[5|6|7]/)  || ($new_data->{'heating_energy_src'} == 5 && $new_data->{'heating_equip_type'} =~ /[3|4]/)
