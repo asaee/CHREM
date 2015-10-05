@@ -373,6 +373,45 @@ This file holds values related to plant components for ESP-r-->
 		<comp_data number="106" description="Performance map: Combustion air correlation coefficient d2 ( 1 /" amount="0.0000"/>
 	</component>
 	
+	<component name="ASHP" description="Air Source Heat Pump connecting to WCH system; 1 node model" comp_num="102" num_control="1" cont_data="1.0" num_data="36"  elec_data="5">
+		<comp_data number="1" description="Component total mass (kg)" amount="110.00"/>                                       
+		<comp_data number="2" description="Mass weighted average specific heat (J/kgK)" amount="3700.0"/>                     
+		<comp_data number="3" description="Heat loss modulus (W/K)" amount="1.000"/>                                         
+		<comp_data number="4" description="COP model [1 fixed;2 - Carnot efficiency; 3- quadratic; 4-cubic]" amount="3.0000"/>
+		<comp_data number="5" description="COP empirical coefficient a0 (-)" amount="5.1897"/>                                
+		<comp_data number="6" description="COP empirical coefficient a1 (-)" amount="-0.85500E-01"/>                                
+		<comp_data number="7" description="COP empirical coefficient a2 (-)" amount="0.50000E-03"/>                                
+		<comp_data number="8" description="COP empirical coefficient a3 (-)" amount="0.0000"/>                                
+		<comp_data number="9" description="Compressor Model" amount="3.0000"/>                                                
+		<comp_data number="10" description="Compressor empirical coefficient a0 (-)" amount="5.8000"/>                         
+		<comp_data number="11" description="Compressor empirical coefficient a1 (-)" amount="0.20000E-02"/>                         
+		<comp_data number="12" description="Compressor empirical coefficient a2 (-)" amount="0.0000"/>                         
+		<comp_data number="13" description="Compressor empirical coefficient a3 (-)" amount="0.0000"/>                         
+		<comp_data number="14" description="Compressor pf (-)" amount="1.0000"/>                                               
+		<comp_data number="15" description="Pump rating (W)" amount="85.000"/>                                                 
+		<comp_data number="16" description="Pump pf (-)" amount="1.0000"/>                                                     
+		<comp_data number="17" description="Flowrate at rated pump power (l/s)" amount="0.33330"/>                              
+		<comp_data number="18" description="Fan power (W)" amount="220.00"/>                                                   
+		<comp_data number="19" description="Fan pf (-)" amount="1.0000"/>                                                      
+		<comp_data number="20" description="Controller power (W)" amount="10.000"/>                                            
+		<comp_data number="21" description="Controller pf (-)" amount="1.0000"/>                                               
+		<comp_data number="22" description="Tout max (degC)" amount="90.000"/>                                                 
+		<comp_data number="23" description="Tin max (degC)" amount="65.000"/>                                                  
+		<comp_data number="24" description="Defrost cycle trigger ambient temp (degC)" amount="-5.0000"/>                       
+		<comp_data number="25" description="Defrost cycle time calc (0 - no defrost 1-user def 2-f(RH))" amount="0.0000"/>     
+		<comp_data number="26" description="Defrost cycle  calc coefficient b0 or time (-)" amount="6.0000"/>                  
+		<comp_data number="27" description="Defrost cycle  calc coefficient b1 (-)" amount="0.04000"/>                          
+		<comp_data number="28" description="Defrost cycle  lockout time (mins)" amount="90.000"/>                              
+		<comp_data number="29" description="Min defrost time (mins)" amount="0.0000"/>                                         
+		<comp_data number="30" description="Max defrost time (mins)" amount="10.000"/>                                         
+		<comp_data number="31" description="Temp compensation on/off (0-off 1-on)" amount="1.0000"/>                           
+		<comp_data number="32" description="Nominal water return temperature (Deg C)" amount="55.000"/>                        
+		<comp_data number="33" description="Nominal water return deadband (Deg C)" amount="5.0000"/>                          
+		<comp_data number="34" description="Temp compensation start temperature [Deg C]" amount="3.0000"/>                     
+		<comp_data number="35" description="Temp compensation end temperature (-)" amount="17.000"/>                           
+		<comp_data number="36" description="Temp compensation gradient c1 (-)" amount="-1.3000"/>
+	</component>
+	
 <!-- WATER HEATING -->
 	<component name="pump" description="variable speed domestic WCH pump; 1 node model" comp_num="15" num_control="1" cont_data="2.0000000E-05" num_data="6"  elec_data="5">
 		<comp_data number="1" description="Component total mass (kg)" amount="3.4000"/>

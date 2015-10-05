@@ -38,7 +38,7 @@ my %region_names = (1, "1-AT", 2, "2-QC", 3, "3-OT", 4, "4-PR", 5, "5-BC");
 
 #Rasoul: ICE_CHP, SE_CHP and SCS are added as upgrade
 my @upgrades;
-my %upgrade_names = (1, "SDHW", 2, "WAM", 3, "WTM", 4, "FVB", 5, "FOH", 6, "PCM", 7, "CVB", 8, "PV", 9, "BIPVT", 10, "ICE_CHP", 11, "SE_CHP", 12, "SCS");
+my %upgrade_names = (1, "SDHW", 2, "WAM", 3, "WTM", 4, "FVB", 5, "FOH", 6, "PCM", 7, "CVB", 8, "PV", 9, "BIPVT", 10, "ICE_CHP", 11, "SE_CHP", 12, "SCS", 13, "AWHP");
 
 #--------------------------------------------------------------------
 # Read the command line input arguments
@@ -68,7 +68,7 @@ COMMAND_LINE: {
 		};
 	};
 #Rasoul: ICE_CHP added as an upgrade
-	if ($ARGV[2] eq "0") {@upgrades = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12);}
+	if ($ARGV[2] eq "0") {@upgrades = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13);}
 	else {
 		@upgrades = split (/\//, $ARGV[2]);	# upgrade types to generate
 		foreach my $up (@upgrades) {
@@ -1100,6 +1100,34 @@ foreach my $hse_type (@hse_types) {
 # 					print "$count_SCS \n";
 					close $FILEOUT;
 					$count->{$hse_names{$hse_type}}->{$region_names{$region}}->{$upgrade_names{$up}} = $count_SCS;
+					$count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'} = $count_total;
+					push (@line, $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{$upgrade_names{$up}}, $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'});
+					print $COUNT CSVjoin (@line) . "\n";
+# 					print " the count for house $hse_names{$hse_type} and region $region_names{$region} is $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'} \n";
+				}
+				case (13) { # eligible houses for AWHP
+					open (my $FILEOUT, '>', '../Eligible_houses/Eligible_Houses_Upgarde_'.$upgrade_names{$up}.'_'.$hse_names{$hse_type}.'_subset_'.$region_names{$region}.'.csv') or die ('../Eligible_houses/Eligible_Houses_Upgarde_'.$upgrade_names{$up}.'_'.$hse_names{$hse_type}.'_subset_'.$region_names{$region}.'.csv'); 	# open writable file
+					my $count_AWHP = 0;
+					my @houses_AWHP;
+					my $count_total= 0;
+					while (<$FILEIN>){
+						($new_data, $_) = &data_read_up ($_, $new_data, $FILEOUT);
+						if ($_ =~ /^\*data,/) { $count_total++;}
+							# examine the existance of heating system that can be replaced by AWHP system
+						    if (defined ($new_data->{'heating_energy_src'} && $new_data->{'heating_equip_type'})) {
+							if (($new_data->{'heating_energy_src'} == 1 && $new_data->{'heating_equip_type'} =~ /[5|6|7]/)  || ($new_data->{'heating_energy_src'} == 5 && $new_data->{'heating_equip_type'} =~ /[3|4]/)
+							|| $new_data->{'heating_energy_src'} =~ /[2|3|4]/) 	# Energy source 5 is wood, it is disabled if wood is not desired to be replaced by oil or NG
+							# if the heating fuel type is 2.Natural gas, 3.Oil, 4.Propane
+							{
+									$houses_AWHP[$count_AWHP] = $new_data->{'file_name'};
+									$count_AWHP++;
+									print $FILEOUT "$_ \n";
+							}
+						 }
+					}
+# 					print "$count_ICE \n";
+					close $FILEOUT;
+					$count->{$hse_names{$hse_type}}->{$region_names{$region}}->{$upgrade_names{$up}} = $count_AWHP;
 					$count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'} = $count_total;
 					push (@line, $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{$upgrade_names{$up}}, $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'});
 					print $COUNT CSVjoin (@line) . "\n";
