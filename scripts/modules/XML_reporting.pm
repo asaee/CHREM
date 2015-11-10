@@ -672,7 +672,7 @@ sub GHG_conversion {
 			my $report = $3;
 			
 			if ($src =~ /electricity/ && $report =~ /onsite_generation/){
-				if ($unit_type =~ /ICE/) {
+				if ($unit_type =~ /ICE|PV/) {
 					my $per_sum = 0;
 					foreach my $period (@{&order($parameters->{$key}, [], [qw(units P00 description)])}) {
 						my $mult;
@@ -684,12 +684,12 @@ sub GHG_conversion {
 						};
 # 						print "En src mult $mult\n";
 # 						print Dumper $en_srcs;
-						$parameters->{"CHREM/SCD/gen/ICE/src/$src/GHG"}->{$period}->{'integrated'} = -1.0 * $parameters->{$key}->{$period}->{'integrated'} /0.0036 / (1 - $en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'trans_dist_loss'}) * $mult / 1000;
-						$per_sum = $per_sum + $parameters->{"CHREM/SCD/gen/ICE/src/$src/GHG"}->{$period}->{'integrated'}
+						$parameters->{"CHREM/SCD/gen/$unit_type/src/$src/GHG"}->{$period}->{'integrated'} = -1.0 * $parameters->{$key}->{$period}->{'integrated'} /0.0036 / (1 - $en_srcs->{$src}->{'province'}->{$XML->{'province'}}->{'trans_dist_loss'}) * $mult / 1000;
+						$per_sum = $per_sum + $parameters->{"CHREM/SCD/gen/$unit_type/src/$src/GHG"}->{$period}->{'integrated'}
 					};
-					$parameters->{"CHREM/SCD/gen/ICE/src/$src/GHG"}->{'P00_Period'}->{'integrated'} = $per_sum;
+					$parameters->{"CHREM/SCD/gen/$unit_type/src/$src/GHG"}->{'P00_Period'}->{'integrated'} = $per_sum;
 				#};
-				$parameters->{"CHREM/SCD/gen/ICE/src/$src/GHG"}->{'units'}->{'integrated'} = 'kg';			
+				$parameters->{"CHREM/SCD/gen/$unit_type/src/$src/GHG"}->{'units'}->{'integrated'} = 'kg';			
 				}			
 			
 			}
@@ -870,7 +870,7 @@ sub organize_xml_log_tree {
 														$i++;
 													}
 												}
-											elsif ($last_2 =~ /electricity|natural_gas/) {
+											elsif ($last_2 =~ /electricity|natural_gas|Heat_Out/) {	#Rasoul: Heat_Out is used for ASHP generation
 												my @name = keys %{$par->{$key_2}->{$key_3}->{$last}->{$last_2}};
 												foreach my $nam (@name) {
 	# 										
@@ -1186,6 +1186,7 @@ sub organize_xml_log_tree {
 							unless ($nxt =~ /name/){
 								my @last_key = keys %{$par->{$key_2}->{$elec_element}->{$nxt}};
 								foreach my $last (@last_key) {
+								unless ($last =~ /name/){
 								if ($last =~ /carbon_dioxide/){
 									if ($list->{'province'} =~ /NEWFOUNDLAND|PRINCE EDWARD ISLAND|NOVA SCOTIA|NEW BRUNSWICK/ ){
 										$new_par_for->{'parameter'}->{'name'} = "CHREM/$key/$key_2/$par->{$key_2}->{'name'}/$elec_element/oil/GHG";
@@ -1202,9 +1203,13 @@ sub organize_xml_log_tree {
 										$new_par_for->{'parameter'}->{'name'} = "CHREM/$key/$key_2/$par->{$key_2}->{'name'}/$elec_element/natural_gas/$last";
 									}
 								}
-								else {
+								elsif ($elec_element =~ /PV|PV_AVL|PV_Use/)  {
+									$new_par_for->{'parameter'}->{'name'} = "CHREM/$key/$key_2$par->{$key_2}->{'name'}/$elec_element/$nxt/electricity/$last";
+								}
+								else  {
 									$new_par_for->{'parameter'}->{'name'} = "CHREM/$key/$key_2/$par->{$key_2}->{'name'}/$elec_element/$nxt/$last";
 								}
+								print $new_par_for->{'parameter'}->{'name'};
 								$new_par_for->{'parameter'}->{'description'} = $par->{$key_2}->{$elec_element}->{$nxt}->{$last}->{'description'};
 								($unit) = ($par->{$key_2}->{$elec_element}->{$nxt}->{$last}->{'units'} =~ /\((.+)\)/); 
 								$new_par_for->{'parameter'}->{'units'} = {'normal' => $unit};
@@ -1259,6 +1264,7 @@ sub organize_xml_log_tree {
 											
 									$i++;
 								}
+							}
 							}
 							}
 							}
