@@ -1124,6 +1124,14 @@ foreach my $hse_type (@hse_types) {
 									print $FILEOUT "$_ \n";
 							}
 						 }
+						# Presence of basement
+						#if (defined ($new_data->{'bsmt_floor_area'} && $new_data->{'crawl_floor_area'} && $new_data->{'slab_on_grade_floor_area'})) {
+						#	if (($new_data->{'bsmt_floor_area'} >= $new_data->{'crawl_floor_area'}) && ($new_data->{'bsmt_floor_area'} >= $new_data->{'slab_on_grade_floor_area'})) {
+						#		$houses_AWHP[$count_AWHP] = $new_data->{'file_name'};
+						#		$count_AWHP++;
+						#		print $FILEOUT "$_ \n";
+						#	}
+						#}
 					}
 # 					print "$count_ICE \n";
 					close $FILEOUT;

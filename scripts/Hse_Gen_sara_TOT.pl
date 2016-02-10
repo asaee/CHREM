@@ -4694,7 +4694,7 @@ MAIN: {
 
 							# Develop the required plant components info for each zone
 							foreach my $zone (@{$zones->{'num_order'}}) {
-								unless ($zone =~ /^crawl$|^attic$|^roof$/) {
+								unless ($zone =~ /^crawl$|^attic$|^roof$|^PV$/) {
 									$zone_counter++;
 								}
 							}
@@ -8451,7 +8451,7 @@ MAIN: {
 							foreach my $zone (@{$zones->{'num_order'}}) {
 							# Since crawl, attic and roof are not heated these are excluded from total zones.
 							# Thus zone_counter keep the number of main zones + basement
-								unless ($zone =~ /^crawl$|^attic$|^roof$/) {
+								unless ($zone =~ /^crawl$|^attic$|^roof$|^PV$/) {
 									$zone_counter++;
 								}
 							}

@@ -1209,7 +1209,7 @@ sub organize_xml_log_tree {
 								else  {
 									$new_par_for->{'parameter'}->{'name'} = "CHREM/$key/$key_2/$par->{$key_2}->{'name'}/$elec_element/$nxt/$last";
 								}
-								print $new_par_for->{'parameter'}->{'name'};
+								#print $new_par_for->{'parameter'}->{'name'};
 								$new_par_for->{'parameter'}->{'description'} = $par->{$key_2}->{$elec_element}->{$nxt}->{$last}->{'description'};
 								($unit) = ($par->{$key_2}->{$elec_element}->{$nxt}->{$last}->{'units'} =~ /\((.+)\)/); 
 								$new_par_for->{'parameter'}->{'units'} = {'normal' => $unit};

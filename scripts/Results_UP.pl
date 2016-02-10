@@ -344,6 +344,7 @@ sub collect_results_data {
 		if ($results_all->{'house_results'}->{$hse_name}->{'use/condensing_boiler/src/natural_gas/energy/integrated'}) {$aux_heat = $aux_heat + $results_all->{'house_results'}->{$hse_name}->{'use/condensing_boiler/src/natural_gas/energy/integrated'}};
 		if ($results_all->{'house_results'}->{$hse_name}->{'use/non_condensing_boiler/src/oil/energy/integrated'}) {$aux_heat = $aux_heat + $results_all->{'house_results'}->{$hse_name}->{'use/non_condensing_boiler/src/oil/energy/integrated'}};
 		if ($results_all->{'house_results'}->{$hse_name}->{'use/space_heating/energy/integrated'}) {$main_heat = $main_heat + $results_all->{'house_results'}->{$hse_name}->{'use/space_heating/energy/integrated'}};
+		if ($results_all->{'house_results'}->{$hse_name}->{'use/ASHP/src/electricity/energy/integrated'}) {$main_heat = $main_heat + $results_all->{'house_results'}->{$hse_name}->{'use/ASHP/src/electricity/energy/integrated'}};
 
 		if ($zones_heat > 0) {
 			$results_all->{'house_results'}->{$hse_name}->{'Zone_heat/energy/integrated'} = sprintf($units->{'GJ'}, $zones_heat);
