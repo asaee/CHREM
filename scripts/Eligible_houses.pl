@@ -38,7 +38,7 @@ my %region_names = (1, "1-AT", 2, "2-QC", 3, "3-OT", 4, "4-PR", 5, "5-BC");
 
 #Rasoul: ICE_CHP, SE_CHP and SCS are added as upgrade
 my @upgrades;
-my %upgrade_names = (1, "SDHW", 2, "WAM", 3, "WTM", 4, "FVB", 5, "FOH", 6, "PCM", 7, "CVB", 8, "PV", 9, "BIPVT", 10, "ICE_CHP", 11, "SE_CHP", 12, "SCS", 13, "AWHP");
+my %upgrade_names = (1, "SDHW", 2, "WAM", 3, "WTM", 4, "FVB", 5, "FOH", 6, "PCM", 7, "CVB", 8, "PV", 9, "BIPVT", 10, "ICE_CHP", 11, "SE_CHP", 12, "SCS", 13, "AWHP", 14, "SAHP_S");
 
 #--------------------------------------------------------------------
 # Read the command line input arguments
@@ -68,7 +68,7 @@ COMMAND_LINE: {
 		};
 	};
 #Rasoul: ICE_CHP added as an upgrade
-	if ($ARGV[2] eq "0") {@upgrades = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13);}
+	if ($ARGV[2] eq "0") {@upgrades = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14);}
 	else {
 		@upgrades = split (/\//, $ARGV[2]);	# upgrade types to generate
 		foreach my $up (@upgrades) {
@@ -1136,6 +1136,136 @@ foreach my $hse_type (@hse_types) {
 # 					print "$count_ICE \n";
 					close $FILEOUT;
 					$count->{$hse_names{$hse_type}}->{$region_names{$region}}->{$upgrade_names{$up}} = $count_AWHP;
+					$count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'} = $count_total;
+					push (@line, $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{$upgrade_names{$up}}, $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'});
+					print $COUNT CSVjoin (@line) . "\n";
+# 					print " the count for house $hse_names{$hse_type} and region $region_names{$region} is $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'} \n";
+				}
+				case (14) { # eligible houses for SCS
+					open (my $FILEOUT, '>', '../Eligible_houses/Eligible_Houses_Upgarde_'.$upgrade_names{$up}.'_'.$hse_names{$hse_type}.'_subset_'.$region_names{$region}.'.csv') or die ('../Eligible_houses/Eligible_Houses_Upgarde_'.$upgrade_names{$up}.'_'.$hse_names{$hse_type}.'_subset_'.$region_names{$region}.'.csv'); 	# open writable file
+					my $count_SCS = 0;
+					my @houses_SCS;
+					my $count_total= 0;
+					while (<$FILEIN>){
+						($new_data, $_) = &data_read_up ($_, $new_data, $FILEOUT);
+						if ($_ =~ /^\*data,/) { $count_total++;}
+						my $width;
+						my @zones = qw (bsmt crawl main_1 main_2 main_3);
+						my $last_zone;
+						my $w_d_ratio = 1;
+						# calculation width of all zones
+						if (defined($new_data->{'exterior_width'} && $new_data->{'exterior_depth'})){
+							if ($new_data->{'exterior_dimension_indicator'} == 0) { # Exterior dimensions specified as: Width/Depth (0)
+								$w_d_ratio = sprintf ("%.2f", $new_data->{'exterior_width'}/ $new_data->{'exterior_depth'});
+								if ($w_d_ratio < 0.66) {
+									$w_d_ratio = sprintf ("%.2f",0.66);
+								}
+								elsif ($w_d_ratio > 1.5) {
+									$w_d_ratio = sprintf ("%.2f",1.5);
+								}
+							}
+							
+							my $depth = sprintf("%6.2f", ($new_data->{'main_floor_area_1'} / $w_d_ratio) ** 0.5);
+							foreach my $zone (@zones) {
+								if ($zone =~ /^bsmt$|^crawl$/) {
+									# Because bsmt walls are thicker, the bsmt or crawl floor area is typically a little less than the main_1 level.
+									# However, it is really not appropriate to expose main_1 floor area for this small difference.
+									# Thus, if the difference between the main_1 and foundation floor area is less than 10% of them main_1 floor area,
+									# resize the foundation area to be equal to the main_1 floor area
+									if ($new_data->{'main_floor_area_1'} - $new_data->{$zone . '_floor_area'} < 0.1 * $new_data->{'main_floor_area_1'}) {
+										$new_data->{$zone . '_floor_area'} = $new_data->{'main_floor_area_1'};
+									}
+									$width->{$zone} = $new_data->{$zone . '_floor_area'} / $depth;	# determine width of zone based upon main_1 depth
+								}
+								elsif ($zone =~ /^main_(\d)$/) {
+									# determine x from floor area and y
+									$width->{$zone} = $new_data->{"main_floor_area_$1"} / $depth;	# determine width of zone based upon main_1 depth
+									if ($width->{$zone} > 0) {
+										$last_zone = $zone;
+									}
+								}
+								
+								
+							};
+							
+							# examine the existance of attic and if the DR house is middle row attachment
+							if (($new_data->{'ceiling_flat_type'} == 2 || $new_data->{'ceiling_flat_type'} == 3) && $new_data->{'attachment_type'} == 1) { # Attic/Gable | Attic/Hip-- Single detached
+								# next criteria is the existance of a proper heating system
+								if (defined ($new_data->{'heating_energy_src'} && $new_data->{'heating_equip_type'})) {
+									if (($new_data->{'heating_energy_src'} == 1 && $new_data->{'heating_equip_type'} =~ /[5|6|7]/)  || ($new_data->{'heating_energy_src'} == 5 && $new_data->{'heating_equip_type'} =~ /[3|4]/)
+									|| $new_data->{'heating_energy_src'} =~ /[2|3|4]/) {	# Energy source 5 is wood, it is disabled if wood is not desired to be replaced by oil or NG
+									# if the heating fuel type is 2.Natural gas, 3.Oil, 4.Propane
+										# the ridgeline is parallel to the longer side 
+										# if the front orientation of the house is south, south-east or south-west to have a ridgeline running west-east
+										# the width which is always front of the house should be more than depth
+										if ($new_data->{'front_orientation'} == 3 || $new_data->{'front_orientation'} == 7) { # Front orientation 3-EAST or 7-WEST
+											if (($width->{'main_1'} < $depth) && ($w_d_ratio != 1)) {
+												$houses_SCS[$count_SCS] = $new_data->{'file_name'};
+												$count_SCS++;
+												print $FILEOUT "$_ \n";
+											}
+										}
+										elsif ($new_data->{'front_orientation'} == 1 || $new_data->{'front_orientation'} == 5) { # Front orientation 1-South or 5-North
+											if (($width->{'main_1'} > $depth) && ($w_d_ratio != 1)) {
+												$houses_SCS[$count_SCS] = $new_data->{'file_name'};
+												$count_SCS++;
+												print $FILEOUT "$_ \n";
+											}
+										}
+										else { # Other front orientations is suitable since one side will be South-East or South-West
+											#if ($width->{'main_1'} > $depth) {
+												$houses_SCS[$count_SCS] = $new_data->{'file_name'};
+												$count_SCS++;
+												print $FILEOUT "$_ \n";
+											#}
+										}
+									}
+								}
+							}
+							# The row houses are attached from right or left or both. So front and back are always detached
+							# in this case the x is always front so the ridgeline never go east -west in case of east and west orientation
+							elsif ($new_data->{'ceiling_flat_type'} == 2 && $new_data->{'attachment_type'} != 1) { # Attic/Gable -- Row Middle or End
+								unless ($new_data->{'front_orientation'} == 3 || $new_data->{'front_orientation'} == 7) {
+									if (defined ($new_data->{'heating_energy_src'} && $new_data->{'heating_equip_type'})) {
+										if (($new_data->{'heating_energy_src'} == 1 && $new_data->{'heating_equip_type'} =~ /[5|6|7]/)  || ($new_data->{'heating_energy_src'} == 5 && $new_data->{'heating_equip_type'} =~ /[3|4]/)
+										|| $new_data->{'heating_energy_src'} =~ /[2|3|4]/) {	# Energy source 5 is wood, it is disabled if wood is not desired to be replaced by oil or NG
+										# if the heating fuel type is 2.Natural gas, 3.Oil, 4.Propane
+											$houses_SCS[$count_SCS] = $new_data->{'file_name'};
+											$count_SCS++;
+											print $FILEOUT "$_ \n";
+										}
+									}
+								}
+							}
+							elsif ($new_data->{'ceiling_flat_type'} == 3 && $new_data->{'attachment_type'} != 1) { # Attic/Hip -- Row End NOTE: middle house never exist with hip
+								if (($width->{$last_zone} * 2 / 3) >= 4 ){
+									if (defined ($new_data->{'heating_energy_src'} && $new_data->{'heating_equip_type'})) {
+										if (($new_data->{'heating_energy_src'} == 1 && $new_data->{'heating_equip_type'} =~ /[5|6|7]/)  || ($new_data->{'heating_energy_src'} == 5 && $new_data->{'heating_equip_type'} =~ /[3|4]/)
+										|| $new_data->{'heating_energy_src'} =~ /[2|3|4]/) {	# Energy source 5 is wood, it is disabled if wood is not desired to be replaced by oil or NG
+										# if the heating fuel type is 2.Natural gas, 3.Oil, 4.Propane
+											$houses_SCS[$count_SCS] = $new_data->{'file_name'};
+											$count_SCS++;
+											print $FILEOUT "$_ \n";
+										}
+									}
+								}
+							}
+							elsif ($new_data->{'ceiling_flat_type'} == 5) { # Flat
+								if (defined ($new_data->{'heating_energy_src'} && $new_data->{'heating_equip_type'})) {
+									if (($new_data->{'heating_energy_src'} == 1 && $new_data->{'heating_equip_type'} =~ /[5|6|7]/)  || ($new_data->{'heating_energy_src'} == 5 && $new_data->{'heating_equip_type'} =~ /[3|4]/)
+									|| $new_data->{'heating_energy_src'} =~ /[2|3|4]/) {	# Energy source 5 is wood, it is disabled if wood is not desired to be replaced by oil or NG
+									# if the heating fuel type is 2.Natural gas, 3.Oil, 4.Propane
+										$houses_SCS[$count_SCS] = $new_data->{'file_name'};
+										$count_SCS++;
+										print $FILEOUT "$_ \n";
+									}
+								}
+							}
+						}
+					}
+# 					print "$count_SCS \n";
+					close $FILEOUT;
+					$count->{$hse_names{$hse_type}}->{$region_names{$region}}->{$upgrade_names{$up}} = $count_SCS;
 					$count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'} = $count_total;
 					push (@line, $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{$upgrade_names{$up}}, $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'});
 					print $COUNT CSVjoin (@line) . "\n";

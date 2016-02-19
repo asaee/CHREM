@@ -570,4 +570,36 @@ This file holds values related to plant components for ESP-r-->
 		<comp_data number="3" description="UA modulus (W/K)" amount="0.0200"/>
 	</component>
 	
+	<component name="fan" description="centrifugal fan, 1 node model ; mass flow control" comp_num="101" num_control="1" cont_data="0.10000000" num_data="6"   elec_data="5">
+		<comp_data number="1" description="Component total mass (kg)" amount="10.000"/>
+		<comp_data number="2" description="Mass weighted average specific heat (J/kgK)" amount="500.00"/>                   
+		<comp_data number="3" description="UA modulus (W/K)" amount="0.20000"/>                                               
+		<comp_data number="4" description="Rated total absorbed power (W)" amount="200.00"/>                                 
+		<comp_data number="5" description=" Rated mass flow rate (kg/s)" amount="10.000"/>                                     
+		<comp_data number="6" description=" Overall efficiency (-)" amount="1.0000"/> 
+         </component>
+	
+	<component name="WA-HP" description="Basic reversible water loop heat pump; 2 node model" comp_num="96" num_control="1" cont_data="10000.000" num_data="11"   elec_data="5">
+		<comp_data number="1" description="Mass of heat pump (kg)" amount="150.00"/>                                         
+		<comp_data number="2" description="Mass weighted average specific heat (J/kgK)" amount="1000.0"/>                    
+		<comp_data number="3" description="UA modulus (W/K)" amount="0.70000E-02"/>                                               
+		<comp_data number="4" description="COP heating (-)" amount="-1.0000"/>                                                 
+		<comp_data number="5" description="COPh coefficient 1 (h2)" amount="0.80000E-03"/>                                        
+		<comp_data number="6" description="COPh coefficient 2 (h1)" amount="0.44400E-01"/>                                        
+		<comp_data number="7" description="COPh coefficient 3 (h0)" amount="3.7429"/>                                        
+		<comp_data number="8" description="COP cooling (-)" amount="3.0000"/>                                               
+		<comp_data number="9" description="COPc coefficient 1 (h2)" amount="1.0000"/>                                       
+		<comp_data number="10" description="COPc coefficient 2 (h1)" amount="1.0000"/>                                       
+		<comp_data number="11" description="COPc coefficient 3 (h0)" amount="1.0000"/>
+         </component>
+         
+         <component name="AW-HX" description="Generic 2-node gas fluid heat exchanger with multiple flow regimes" comp_num="54" num_control="0" num_data="6"   elec_data="0">
+		<comp_data number="1" description="Mass of encapsulated fluid on hot side (kg)" amount="0.10000"/>                  
+		<comp_data number="2" description="Mass of encapsulated fluid on the cold side (kg)" amount="0.10000"/>             
+		<comp_data number="3" description="Overall heat transfer coefficient (W/m^2K)" amount="0.60000E+06"/>                     
+		<comp_data number="4" description="Heat transfer surface area (m^2)" amount="100.00"/>                              
+		<comp_data number="5" description="UA modulus for component (W/K)" amount="0.10000E-01"/>                                 
+		<comp_data number="6" description="Flow arrangement index (-)" amount="8.0000"/>
+        </component>
+        
 </plant_components>

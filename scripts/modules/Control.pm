@@ -28,7 +28,7 @@ our @ISA = qw(Exporter);
 
 #Rasoul: export subroutines
 # Place the routines that are to be automatically exported here
-our @EXPORT = qw(basic_5_season slave free_float CFC_control SDHW_control ICE_CHP_control SE_CHP_control SCS_control AWHP_control ICE_CHP_control_bldg);
+our @EXPORT = qw(basic_5_season slave free_float CFC_control SDHW_control ICE_CHP_control SE_CHP_control SCS_control AWHP_control SAHP_S_control ICE_CHP_control_bldg);
 # Place the routines that must be requested as a list following use in the calling script
 our @EXPORT_OK = ();
 
@@ -1283,6 +1283,241 @@ sub AWHP_control {
 			   '    1    8   0.000  # ctl type, law (On-Off control.), start @',
 			   '      7.  # No. of data items',
 			   '  1.00000 54.00000 56.00000 0.00002 0.00000 0.00000 0.00000',);
+	}
+	
+
+	# Declare a string to store the concatenated control lines
+	my $string = '';
+	
+	# Cycle over the array and concatenate the lines with an end of line character
+	foreach my $line (@control) {
+		$string = $string . $line . "\n";
+	};
+	# Return the string
+	return ($string);
+
+};
+#=====================================================================
+
+sub SAHP_S_control {
+	my $sys_type = shift; # SCS system type
+	my $set_point_T = shift; # Heating ste point temperature for main 1 (from CSDDRD database)
+	my $dsgn_htng_load = shift; # capacity of existing heating system
+	my $no_coll_loop = shift; # Number of collector loops
+	my $aux_htng_rate = shift;   # Auxiliary system heating capacity
+	my $region = shift;   # Region, define the type of auxiliary system
+	my $pump_stat = shift; # tank's pump status on or off
+	my $mult = shift; # dhw multiplier
+	
+	$mult = sprintf("%.2f", $mult);
+
+	my $pump_tank_signal; 	# A signal that indicates pump flow rate
+	my $pump_HWtank_signal; 	# A signal that indicates pump flow rate
+	my $pump_radiator_signal; 	# A signal that indicates pump flow rate
+	my $fan_signal;		 	# A signal that indicates fan flow rate
+	my $HP_signal_1;		 	# A signal that indicates heat pump heating rate
+	my $HP_signal_2;		 	# A signal that indicates heat pump heating rate
+	my $HP_signal_3;		 	# A signal that indicates heat pump heating rate
+	my $ON_T;
+	my $OFF_T;
+	my $aux_node; # 1 for condensing and 2 for non-condensing
+
+
+	$ON_T = sprintf ("%.1f", 17.0);			#$set_point_T - 2.0);
+	$OFF_T = sprintf ("%.1f", 18.0);		#$set_point_T);
+	$dsgn_htng_load = sprintf ("%.0f", 1000.0 * $dsgn_htng_load);
+	$pump_tank_signal = sprintf ("%.5f", $no_coll_loop * 3 * 0.00002);
+	$pump_HWtank_signal = sprintf ("%.5f", $dsgn_htng_load /4200.0/ 20.0/ 1000.0);
+	$fan_signal = sprintf ("%.5f", $dsgn_htng_load /1000.0/ 30.0);
+	$HP_signal_1 = sprintf ("%.1f", $dsgn_htng_load /4.20/ 10.0);
+	$HP_signal_2 = 0.87 * $HP_signal_1 ;
+	$HP_signal_3 = 0.625 *$HP_signal_1 ;
+
+	if ($pump_stat =~ /NO|N/i) {
+		$pump_radiator_signal = sprintf ("%.5f",0);
+	}
+	else {
+		#mass flow rate= design heating load / delta T /specific heat of water/ 1000 
+		$pump_radiator_signal = sprintf ("%.6f",$dsgn_htng_load / 20.0 /4200.0/1000.0);		
+	}
+
+	if ($region =~ /1/) {
+		$aux_node = 1;
+	}
+	else {
+		$aux_node = 1;		
+	}
+
+
+	my @control;
+	if ($sys_type =~ /1/) {
+		@control = 
+			  ('* Control loops    1',
+			   '# sen var diff bet compt.  1:FPC_loop-1 @ node  1and compt  3:storage_tank @ node  1',
+			   '   -1    1    1    3    1  # sensor ',
+			   '# plant component   2:pump_tank @ node no.  1',
+   			   '   -1    2    1    0  # actuator ',
+			   '    1  # all daytypes',
+			   '    1  365  # valid Wed-01-Jan - Wed-31-Dec',
+			   '     1  # No. of periods in day: weekday     ',
+			   '   12    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  1.00000 1.00000 5.00000 0.00000 $pump_tank_signal 0.00000 0.00000",
+			   '* Control loops    2',
+			   '# senses var in compt. 11:HW_tank @ node no.  2',
+			   '   -1    11    2    0    0  # sensor ',
+			   '# plant component   6:pump-HWT @ node no.  1',
+			   '   -1    6    1    0  # actuator ',
+			   '    1  # all daytypes',
+			   '    1  365  # valid Wed-01-Jan - Wed-31-Dec',
+			   '     1  # No. of periods in day: weekday     ',
+			   '   12    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  1.00000 50.00000 55.00000 $pump_HWtank_signal 0.00000 0.00000 0.00000",
+			   '* Control loops    3',
+			   '# sen var diff bet compt.  3:storage_tank @ node  2',
+			   '   -1   3    2    0    0  # sensor ',
+			   '# plant component  22:fan @ node no.  1',
+			   '   -1    22    1    0  # actuator ',
+			   '    1  # all daytypes',
+			   '    1  365  # valid Sat-01-Jan - Sun-31-Dec',
+			   '     1  # No. of periods in day: weekday     ',
+			   '    12    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  -1.00000 2.00000 1.00000 $fan_signal 0.00000 0.00000 0.00000",
+			   '* Control loops    4',
+			   '# senses var in compt.  11:HW_tank @ node no.  2',
+			   '   -1    11    2    0    0  # sensor ',
+			   '# plant component   15:HP @ node no.  1',
+			   '   -1    15    1    0  # actuator ',
+			   '    6  # all daytypes',
+			   '    1   31  # valid Sat-01-Jan - Mon-31-Jan',
+			   '     1  # No. of periods in day: weekday     ',
+			   '   12    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  1.00000 50.00000 55.00000 $HP_signal_1 0.00000 0.00000 0.00000",
+			   '    32   59  # valid Sat-01-Jan - Mon-31-Jan',
+			   '     1  # No. of periods in day: weekday     ',
+			   '   12    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  1.00000 50.00000 55.00000 $HP_signal_1 0.00000 0.00000 0.00000",
+			   '    59   151  # valid Sat-01-Jan - Mon-31-Jan',
+			   '     1  # No. of periods in day: weekday     ',
+			   '   12    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  1.00000 50.00000 55.00000 $HP_signal_2 0.00000 0.00000 0.00000",
+			   '   152   273  # valid Sat-01-Jan - Mon-31-Jan',
+			   '     1  # No. of periods in day: weekday     ',
+			   '   12    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   '  1.00000 50.00000 55.00000 0.000100 0.00000 0.00000 0.00000',
+			   '   274   300  # valid Sat-01-Jan - Mon-31-Jan',
+			   '     1  # No. of periods in day: weekday     ',
+			   '   12    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  1.00000 50.00000 55.00000 $HP_signal_3 0.00000 0.00000 0.00000",
+			   '   301   365  # valid Sat-01-Jan - Mon-31-Jan',
+			   '     1  # No. of periods in day: weekday     ',
+			   '   12    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  1.00000 50.00000 55.00000 $HP_signal_2 0.00000 0.00000 0.00000",
+			   '* Control loops    5',
+			   '# senses var in compt. 3:storage-tank @ node no.  2',
+			   '   -1   3    2    0    0  # sensor ',
+			   '# plant component  21:pump-HP @ node no.  1',
+			   '   -1   21    1    0  # actuator ',
+			   '    1  # all daytypes',
+			   '    1  365  # valid Sat-01-Jan - Sun-31-Dec',
+			   '     1  # No. of periods in day: weekday     ',
+			   '    12    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  -1.00000 2.00000 1.00000 $pump_HWtank_signal 0.00000 0.00000 0.00000",
+			   '* Control loops    6',
+			   '# senses var in compt.  7:aux-boiler @ node no.  2',
+			   '   -1    7    2    0    0  # sensor ',
+			   '# plant component   7:aux-boiler @ node no.  2',
+			   "   -1    7    $aux_node    0  # actuator ",
+			   '    1  # all daytypes',
+			   '    1  365  # valid Wed-01-Jan - Wed-31-Dec',
+			   '     1  # No. of periods in day: weekday     ',
+			   '   12    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   '  1.00000 50.00000 55.00000 1.00000 0.00000 0.00000 0.00000',
+			   '* Control loops    7',
+			   '# senses dry bulb temperature in main_1.',
+			   '    1    0    0    0    0  # sensor ',
+			   '# plant component   5:pump-radiator @ node no.  1',
+			   '   -1    5    1    0  # actuator ',
+			   '    5 # No. day types using dates of validity',
+			   '    1   91  # valid Sat-01-Jan - Sat-01-Apr',
+			   '     1  # No. of periods in day: weekday     ',
+			   '    1    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items,',
+			   "  1.00000 $ON_T $OFF_T $pump_radiator_signal 0.00000 0.00000 0.00000",
+			   '   92  154  # valid Sun-02-Apr - Sat-03-Jun',
+			   '     1  # No. of periods in day: saturday    ',
+			   '    1    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  1.00000 $ON_T $OFF_T $pump_radiator_signal 0.00000 0.00000 0.00000",
+			   '  155  259  # valid Sun-04-Jun - Sat-16-Sep',
+			   '     1  # No. of periods in day: sunday      ',
+			   '    1    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  1.00000 0 1 $pump_radiator_signal 0.00000 0.00000 0.00000",
+			   '  260  280  # valid Sun-17-Sep - Sat-07-Oct',
+			   '     1  # No. of periods in day: holiday     ',
+			   '    1    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  1.00000 $ON_T $OFF_T $pump_radiator_signal 0.00000 0.00000 0.00000",
+			   '  281  365  # valid Sun-08-Oct - Sun-31-Dec',
+			   '     1  # No. of periods in day:             ',
+			   '    1    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   "  1.00000 $ON_T $OFF_T $pump_radiator_signal 0.00000 0.00000 0.00000",
+			   '* Control loops    8',
+			   '# senses var in compt. 8:water_flow @ node no.  1',
+			   '   -1   8    1    0    0  # sensor ',
+			   '# plant component  8:water_flow @ node no.  2',
+			   '   -1   8    2    0  # actuator ',
+			   '    1  # all daytypes',
+			   '    1  365  # valid Sat-01-Jan - Sun-31-Dec',
+			   '     1  # No. of periods in day: weekday     ',
+			   '    0   12   0.000  # ctl type, law (undefined control), start @',
+			   '      3.  # No. of data items',
+			   "  1.00000 1.00000 $mult",
+			   '* Control loops    9',
+			   '# senses var in compt. 13:DHW-tank @ node no.  1',
+			   '   -1   13    1    0    0  # sensor ',
+			   '# plant component  12:DHW-pump @ node no.  1',
+			   '   -1   12    1    0  # actuator ',
+			   '    1  # all daytypes',
+			   '    1  365  # valid Sat-01-Jan - Sun-31-Dec',
+			   '     1  # No. of periods in day: weekday     ',
+			   '    1    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   '  1.00000 54.00000 56.00000 0.00002 0.00000 0.00000 0.00000',
+			   '* Control loops   10',
+			   '# sen var diff bet compt.  3:storage_tank @ node  2and compt 11:HW_tank @ node  1',
+			   '   -1    3    2   11    1  # sensor ',
+			   '# plant component  20:valve-HX @ node no.  1',
+			   '   -1   20    1    0  # actuator ',
+			   '    1  # all daytypes',
+			   '    1  365  # valid Sat-01-Jan - Sun-31-Dec',
+			   '     1  # No. of periods in day: weekday',
+			   '    1    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   '  1.00000 0.00000 1.00000 0.00000 1.00000 0.00000 0.00000',
+			   '* Control loops   11',
+			   '# sen var diff bet compt.  3:storage_tank @ node  2and compt 11:HW_tank @ node  1',
+			   '   -1    3    2   11    1  # sensor',
+			   '# plant component  19:valve-HP @ node no.  1',
+			   '   -1   19    1    0  # actuator',
+			   '    1  # all daytypes',
+			   '    1  365  # valid Sat-01-Jan - Sun-31-Dec',
+			   '     1  # No. of periods in day: weekday',
+			   '    1    8   0.000  # ctl type, law (On-Off control.), start @',
+			   '      7.  # No. of data items',
+			   '  1.00000 0.00000 1.00000 0.00000 1.00000 0.00000 0.00000');
 	}
 	
 
