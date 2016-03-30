@@ -82,12 +82,13 @@ sub upgrade_name {
 			case (6) {$name_up->{$up} ='PCM';}	# phase change material
 			case (7) {$name_up->{$up} ='CVB';}	# controlable venetian blind
 			case (8) {$name_up->{$up} ='PV';}	# photovoltaic
-			case (9) {$name_up->{$up} ='BIPVT';}	# building integrated photovoltaic / thermal
+			case (9) {$name_up->{$up} ='BIPHVT';}	# building integrated photovoltaic / thermal
 			case (10) {$name_up->{$up} ='ICE_CHP';}	# ICE based co-generation system
 			case (11) {$name_up->{$up} ='SE_CHP';}	# SE based co-generation system
 			case (12) {$name_up->{$up} ='SCS';}	# Solar combisystem
 			case (13) {$name_up->{$up} ='AWHP';}	# Air to water heat pump
 			case (14) {$name_up->{$up} ='SAHP_S';}	# Solar Assisted heat pump-Series
+			case (15) {$name_up->{$up} ='SAHP_P';}	# Solar Assisted heat pump-Parallel
 		}
 	};
       return ($name_up);
@@ -463,7 +464,32 @@ sub input_upgrade {
 				die "The efficiency shall be between 0 and 1! \n";
 			}
 		}
-		elsif ($list->{$up} eq 'BIPVT') {
+		elsif ($list->{$up} eq 'BIPHVT') {
+			$input->{$list->{$up}}= &cross_ref_up('../Input_upgrade/Input_'.$list->{$up}.'.csv');	# create an input reference crosslisting hash
+			unless (defined ($input->{$list->{$up}}->{'Vmpp'})) {
+				die "The voltage at maximum power point is not defined! \n";
+			}
+			elsif ($input->{$list->{$up}}->{'Vmpp'} <= 0) {
+				die "The value of voltage at maximum power point is not correct! \n";
+			}
+			unless (defined ($input->{$list->{$up}}->{'Isc'})) {
+				die "The short-circuit current is not defined! \n";
+			}
+			elsif ($input->{$list->{$up}}->{'Isc'} <= 0) {
+				die "The short-circuit current value is not correct! \n";
+			}
+			if ($input->{$list->{$up}}->{'Voc/Vmpp'} < 1 ||  $input->{$list->{$up}}->{'Voc/Vmpp'} > 2) {
+				die "The Voc/Vmpp ratio is out of range!\n";
+			}
+			if ($input->{$list->{$up}}->{'Isc/Impp'} < 1 ||  $input->{$list->{$up}}->{'Voc/Vmpp'} > 2) {
+				die "The Isc/Impp ratio is out of range!\n";
+			}
+			if ($input->{$list->{$up}}->{'efficiency'} < 0 || $input->{$list->{$up}}->{'efficiency'} > 100) {
+				die "The efficiency shall be between 0 and 100! \n";
+			}
+			if ($input->{$list->{$up}}->{'mis_factor'} < 0 || $input->{$list->{$up}}->{'mis_factor'} > 1) {
+				die "The efficiency shall be between 0 and 1! \n";
+			}
 		}
 #Rasoul: Add input data for ICE_CHP
 		elsif ($list->{$up} eq 'ICE_CHP' || $list->{$up} eq 'SE_CHP') {
@@ -532,6 +558,31 @@ sub input_upgrade {
 			# specify if solar pump is on or off (off makes the base case)
 			unless ($input->{$list->{$up}}->{'pump_on'} =~ /Y|N|NO|YES/i) {
 				die "please specify solar pump is on or off! \n";
+			}
+		}
+		elsif ($list->{$up} eq 'SAHP_P') {
+			$input->{$list->{$up}}= &cross_ref_up('../Input_upgrade/Input_'.$list->{$up}.'.csv');	# create an input reference crosslisting hash
+			# read the SCS system type (it can be 1) according to reference
+			unless ($input->{$list->{$up}}->{'system_type'} =~ /[1-2]/) {
+				die "SCS system type should be 1 or 2! \n";
+			}
+			
+			# read the glycol percentage. for the time being only 0 and 50% is acceptable by esp-r
+			unless ($input->{$list->{$up}}->{'glycol_perc'} =~ /0|50/) {
+				die "glycol percentage can be 0 or 50%! \n";
+			}
+			
+			# specify if solar pump is on or off (off makes the base case)
+			unless ($input->{$list->{$up}}->{'pump_on'} =~ /Y|N|NO|YES/i) {
+				die "please specify solar pump is on or off! \n";
+			}
+			unless ($input->{$list->{$up}}->{'Def_cycle'} =~ /[0-2]/) {
+				die "please specify defrost cycle is on (1) or off (0) or f(RH) (2)! \n";
+			}
+			
+			# specify if solar pump is on or off (off makes the base case)
+			unless ($input->{$list->{$up}}->{'Temp_compensation'} =~ /[0-1]/) {
+				die "please specify temperature compensation is on (1) or off (0)! \n";
 			}
 		}
 	}

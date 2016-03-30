@@ -41,7 +41,7 @@ my %region_names = (1, "1-AT", 2, "2-QC", 3, "3-OT", 4, "4-PR", 5, "5-BC");
 my @upgrades;
 
 #Rasoul: ICE-CHP added
-my %upgrade_names = (1, "SDHW", 2, "WAM", 3, "WTM", 4, "FVB", 5, "FOH", 6, "PCM", 7, "CVB", 8, "PV", 9, "BIPVT", 10, "ICE_CHP", 11, "SE_CHP", 12, "SCS", 13, "AWHP", 14, "SAHP_S");
+my %upgrade_names = (1, "SDHW", 2, "WAM", 3, "WTM", 4, "FVB", 5, "FOH", 6, "PCM", 7, "CVB", 8, "PV", 9, "BIPHVT", 10, "ICE_CHP", 11, "SE_CHP", 12, "SCS", 13, "AWHP", 14, "SAHP_S", 15, "SAHP_P");
 
 my %provinces = ("NF", "NEWFOUNDLAND", "NS", "NOVA SCOTIA" , "PE", "PRINCE EDWARD ISLAND", "NB", "NEW BRUNSWICK", "QC", "QUEBEC", "OT", "ONTARIO", "MB", "MANITOBA", "SK", "SASKATCHEWAN", "AB", "ALBERTA" , "BC", "BRITISH COLUMBIA");
 #--------------------------------------------------------------------
@@ -57,7 +57,7 @@ my $houses;
 @hse_types = (1,2);
 @regions = (1,2,3,4,5);
 #Rasoul: upgrade added
-@upgrades = (1,2,3,4,5,6,7,8,9,10,11,12,13,14);
+@upgrades = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15);
 
 foreach my $hse_type (@hse_types) {
 	foreach my $prov (keys (%provinces)){

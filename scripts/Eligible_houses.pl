@@ -38,7 +38,7 @@ my %region_names = (1, "1-AT", 2, "2-QC", 3, "3-OT", 4, "4-PR", 5, "5-BC");
 
 #Rasoul: ICE_CHP, SE_CHP and SCS are added as upgrade
 my @upgrades;
-my %upgrade_names = (1, "SDHW", 2, "WAM", 3, "WTM", 4, "FVB", 5, "FOH", 6, "PCM", 7, "CVB", 8, "PV", 9, "BIPVT", 10, "ICE_CHP", 11, "SE_CHP", 12, "SCS", 13, "AWHP", 14, "SAHP_S");
+my %upgrade_names = (1, "SDHW", 2, "WAM", 3, "WTM", 4, "FVB", 5, "FOH", 6, "PCM", 7, "CVB", 8, "PV", 9, "BIPHVT", 10, "ICE_CHP", 11, "SE_CHP", 12, "SCS", 13, "AWHP", 14, "SAHP_S", 15, "SAHP_P");
 
 #--------------------------------------------------------------------
 # Read the command line input arguments
@@ -68,7 +68,7 @@ COMMAND_LINE: {
 		};
 	};
 #Rasoul: ICE_CHP added as an upgrade
-	if ($ARGV[2] eq "0") {@upgrades = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14);}
+	if ($ARGV[2] eq "0") {@upgrades = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15);}
 	else {
 		@upgrades = split (/\//, $ARGV[2]);	# upgrade types to generate
 		foreach my $up (@upgrades) {
@@ -845,8 +845,8 @@ foreach my $hse_type (@hse_types) {
 				}
 				case (9) {  # eligible houses for BIPV/T
 					open (my $FILEOUT, '>', '../Eligible_houses/Eligible_Houses_Upgarde_'.$upgrade_names{$up}.'_'.$hse_names{$hse_type}.'_subset_'.$region_names{$region}.'.csv') or die ('../Eligible_houses/Eligible_Houses_Upgarde_'.$upgrade_names{$up}.'_'.$hse_names{$hse_type}.'_subset_'.$region_names{$region}.'.csv'); 	# open writable file
-					my $count_BIPVT = 0;
-					my @houses_BIPVT;
+					my $count_BIPHVT = 0;
+					my @houses_BIPHVT;
 					my $count_total= 0;
 					while (<$FILEIN>){
 						($new_data, $_) = &data_read_up ($_, $new_data, $FILEOUT);
@@ -885,15 +885,15 @@ foreach my $hse_type (@hse_types) {
 # 									if the front orientation of the house is south, south-east or south-west to have a ridgeline running west-east the width which is always front of the house should be more than depth
 									if ($new_data->{'front_orientation'} == 3 || $new_data->{'front_orientation'} == 7) {
 										if ($width->{$last_zone} < $depth) {
-											$houses_BIPVT[$count_BIPVT] = $new_data->{'file_name'};
-											$count_BIPVT++;
+											$houses_BIPHVT[$count_BIPHVT] = $new_data->{'file_name'};
+											$count_BIPHVT++;
 											print $FILEOUT "$_ \n";
 										}
 									}
 									else {
 										if ($width->{$last_zone} > $depth) {
-											$houses_BIPVT[$count_BIPVT] = $new_data->{'file_name'};
-											$count_BIPVT++;
+											$houses_BIPHVT[$count_BIPHVT] = $new_data->{'file_name'};
+											$count_BIPHVT++;
 											print $FILEOUT "$_ \n";
 										}
 									}
@@ -902,8 +902,8 @@ foreach my $hse_type (@hse_types) {
 							elsif ($new_data->{'ceiling_flat_type'} == 3) {
 								if ($new_data->{'attachment_type'} == 2 || $new_data->{'attachment_type'} == 3) { # DR - left/right end house type
 									if (($width->{$last_zone} * 2 / 3) >= 4 && ($new_data->{'DHW_equip_type'} != 9)){
-										$houses_BIPVT[$count_BIPVT] = $new_data->{'file_name'};
-										$count_BIPVT++;
+										$houses_BIPHVT[$count_BIPHVT] = $new_data->{'file_name'};
+										$count_BIPHVT++;
 										print $FILEOUT "$_ \n";
 									}
 								}
@@ -911,7 +911,7 @@ foreach my $hse_type (@hse_types) {
 						}
 					}
 					close $FILEOUT;
-					$count->{$hse_names{$hse_type}}->{$region_names{$region}}->{$upgrade_names{$up}} = $count_BIPVT;
+					$count->{$hse_names{$hse_type}}->{$region_names{$region}}->{$upgrade_names{$up}} = $count_BIPHVT;
 					$count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'} = $count_total;
 					push (@line, $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{$upgrade_names{$up}}, $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'});
 					print $COUNT CSVjoin (@line)."\n";
@@ -1141,7 +1141,7 @@ foreach my $hse_type (@hse_types) {
 					print $COUNT CSVjoin (@line) . "\n";
 # 					print " the count for house $hse_names{$hse_type} and region $region_names{$region} is $count->{$hse_names{$hse_type}}->{$region_names{$region}}->{'total'} \n";
 				}
-				case (14) { # eligible houses for SCS
+				case (14|15) { # eligible houses for SCS
 					open (my $FILEOUT, '>', '../Eligible_houses/Eligible_Houses_Upgarde_'.$upgrade_names{$up}.'_'.$hse_names{$hse_type}.'_subset_'.$region_names{$region}.'.csv') or die ('../Eligible_houses/Eligible_Houses_Upgarde_'.$upgrade_names{$up}.'_'.$hse_names{$hse_type}.'_subset_'.$region_names{$region}.'.csv'); 	# open writable file
 					my $count_SCS = 0;
 					my @houses_SCS;
