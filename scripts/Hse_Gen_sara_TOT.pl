@@ -8763,6 +8763,8 @@ MAIN: {
 							my $Pump_power_HP = 0;
 							my $Pump_flow_HP = 0;
 							my $Fan_power_HP = 0;
+							my $Tout_MaxHP = 0.0;
+							my $Tin_MaxHP =0.0;
 							# Partial load of each zone to the total heating load of house
 							my $par_htng_main_1 = 0;
 							my $par_htng_main_2 = 0;
@@ -8789,17 +8791,19 @@ MAIN: {
 
 							# Aux_system capacity is defined based on the existing H/S capacity. A series of condensing and non condensing boilers are
 							# selected from Viessmann products and assigned to the houses based on the thermal demand and region.
-							if ($exist_htng_cap > 26000) {
-								$Mass_HP = 280;
-								$COP_a0 = 7.9426;
-								$COP_a1 = -0.1389;
-								$COP_a2 = 0.0008;
-								$Comp_a0 = 3.7;		# Nominal Capacity = 28 kW
-								$Comp_a1 = 0.017;
-								$Pump_power_HP = 90+0.0002*28000;		# P = 90W+2*10^-4*Q_HP
-								$Pump_flow_HP = sprintf ("%.4f",28000/10/4200);		#mass flow rate= design heating load / delta T /specific heat of water (l/s)
-								$Fan_power_HP = 50;
-								$HWT_vol = 2.650;
+							if ($exist_htng_cap > 21000) {
+								$Mass_HP = 325;
+								$COP_a0 = 5.2202;
+								$COP_a1 = -0.077;
+								$COP_a2 = 0.0004;
+								$Comp_a0 = 10.424;		# Nominal Capacity = 19 kW
+								$Comp_a1 = -0.007;
+								$Pump_power_HP = 90+0.0002*16000;		# P = 90W+2*10^-4*Q_HP
+								$Pump_flow_HP = sprintf ("%.4f",16000/7/4200);		#mass flow rate= design heating load / delta T /specific heat of water (l/s)
+								$Fan_power_HP = 480;
+								$Tout_MaxHP = -15.0;
+								$Tin_MaxHP = 55.0;
+								$HWT_vol = 1.50;
 								if ($region =~ 1) {
 									$aux_htng_rate = 18000; # Aux_system capacity = 18 kW
 								}
@@ -8807,17 +8811,19 @@ MAIN: {
 									$aux_htng_rate = 19000; # Aux_system capacity = 19 kW
 								}
 							}
-							elsif ($exist_htng_cap > 19000) {
-								$Mass_HP = 190;
-								$COP_a0 = 7.9426;
-								$COP_a1 = -0.1389;
-								$COP_a2 = 0.0008;
-								$Comp_a0 = 2.5;		# Nominal Capacity = 19 kW
-								$Comp_a1 = 0.017;
-								$Pump_power_HP = 90+0.0002*19000;		# P = 90W+2*10^-4*Q_HP
-								$Pump_flow_HP = sprintf ("%.4f",19000/10/4200);		#mass flow rate= design heating load / delta T /specific heat of water (l/s)
-								$Fan_power_HP = 50;
-								$HWT_vol = 2.0;
+							elsif ($exist_htng_cap > 16000) {
+								$Mass_HP = 210;
+								$COP_a0 = 5.0948;
+								$COP_a1 = -0.0583;
+								$COP_a2 = 0.0003;
+								$Comp_a0 = 7.3568;		# Nominal Capacity = 15 kW
+								$Comp_a1 = -0.006;
+								$Pump_power_HP = 90+0.0002*12000;		# P = 90W+2*10^-4*Q_HP
+								$Pump_flow_HP = sprintf ("%.4f",12000/7/4200);		#mass flow rate= design heating load / delta T /specific heat of water (l/s)
+								$Fan_power_HP = 230;
+								$Tout_MaxHP = -15.0;
+								$Tin_MaxHP = 55.0;
+								$HWT_vol = 1.0;
 								if ($region =~ 1) {
 									$aux_htng_rate = 18000; # Aux_system capacity = 18 kW
 								}
@@ -8826,16 +8832,18 @@ MAIN: {
 								}
 							}
 							elsif ($exist_htng_cap > 11000) {
-								$Mass_HP = 150;
-								$COP_a0 = 7.9426;
-								$COP_a1 = -0.1389;
-								$COP_a2 = 0.0008;
-								$Comp_a0 = 2.0;		# Nominal Capacity = 15 kW
-								$Comp_a1 = 0.017;
-								$Pump_power_HP = 90+0.0002*15000;		# P = 90W+2*10^-4*Q_HP
-								$Pump_flow_HP = sprintf ("%.4f",15000/10/4200);		#mass flow rate= design heating load / delta T /specific heat of water (l/s)
-								$Fan_power_HP = 50;
-								$HWT_vol = 1.50;
+								$Mass_HP = 205;
+								$COP_a0 = 5.6818;
+								$COP_a1 = -0.0864;
+								$COP_a2 = 0.0005;
+								$Comp_a0 = 5.6681;		# Nominal Capacity = 11 kW
+								$Comp_a1 = -0.007;
+								$Pump_power_HP = 90+0.0002*8000;		# P = 90W+2*10^-4*Q_HP
+								$Pump_flow_HP = sprintf ("%.4f",8000/7/4200);		#mass flow rate= design heating load / delta T /specific heat of water (l/s)
+								$Fan_power_HP = 190;
+								$Tout_MaxHP = -15.0;
+								$Tin_MaxHP = 55.0;
+								$HWT_vol = 0.750;
 								if ($region =~ 1) {
 									$aux_htng_rate = 18000; # Aux_system capacity = 18 kW
 								}
@@ -8844,15 +8852,17 @@ MAIN: {
 								}
 							}
 							else {
-								$Mass_HP = 80;
-								$COP_a0 = 7.9426;
-								$COP_a1 = -0.1389;
-								$COP_a2 = 0.0008;
-								$Comp_a0 = 1.1;		# Nominal Capacity = 8 kW
-								$Comp_a1 = 0.017;
+								$Mass_HP = 205;
+								$COP_a0 = 5.6818;
+								$COP_a1 = -0.0864;
+								$COP_a2 = 0.0005;
+								$Comp_a0 = 5.6681;		# Nominal Capacity = 8 kW
+								$Comp_a1 = -0.007;
 								$Pump_power_HP = 90+0.0002*8000;		# P = 90W+2*10^-4*Q_HP
-								$Pump_flow_HP = sprintf ("%.4f",8000/10/4200);		#mass flow rate= design heating load / delta T /specific heat of water (l/s)
-								$Fan_power_HP = 50;
+								$Pump_flow_HP = sprintf ("%.4f",8000/7/4200);		#mass flow rate= design heating load / delta T /specific heat of water (l/s)
+								$Fan_power_HP = 190;
+								$Tout_MaxHP = -15.0;
+								$Tin_MaxHP = 55.0;
 								$HWT_vol = 0.750;
 								if ($region =~ 1) {
 									$aux_htng_rate = 18000; # Aux_system capacity = 18 kW
@@ -8960,8 +8970,23 @@ MAIN: {
 										elsif ($comp_data->{'description'} =~ /Fan power \(W\)/i) {
 											$amount = $Fan_power_HP;
 										}
+										elsif ($comp_data->{'description'} =~ /Tout max \(degC\)/i) {
+											$amount = $Tout_MaxHP;
+										}
+										elsif ($comp_data->{'description'} =~ /Tin max \(degC\)/i) {
+											$amount = $Tin_MaxHP;
+										}
+										elsif ($comp_data->{'description'} =~ /Defrost cycle trigger ambient temp \(degC\)/i) {
+											$amount = 0.0;
+										}
 										elsif ($comp_data->{'description'} =~ /Defrost cycle time calc \(0 - no defrost 1-user def 2-f\(RH\)\)/i) {
 											$amount = $input->{$up_name}->{'Def_cycle'};
+										}
+										elsif ($comp_data->{'description'} =~ /Defrost cycle  calc coefficient b0 or time \(-\)/i) {
+											$amount = 6.0;
+										}
+										elsif ($comp_data->{'description'} =~ /Defrost cycle  calc coefficient b1 \(-\)/i) {
+											$amount = 0.040;
 										}
 										elsif ($comp_data->{'description'} =~ /Temp compensation on\/off \(0-off 1-on\)/i) {
 											$amount = $input->{$up_name}->{'Temp_compensation'};
@@ -9232,7 +9257,7 @@ MAIN: {
 									&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'HW_tank           2     3     radiator_main_1   1    1.000                 # 13');
 									
 									&replace ($hse_file->{"pln"}, "#CONTAINMENTS_NUM", 1, 1, "%s   %s\n", '7', '# Total number of containments');
-									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "ASHP             3   $zone_mechanical    0.00000    0.00000");
+									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "ASHP             0   0    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "HW_tank          3   $zone_mechanical    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "aux-boiler       3   $zone_mechanical    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "pump_radiator    3   $zone_mechanical    0.00000    0.00000");
@@ -9250,7 +9275,7 @@ MAIN: {
 									&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'HW_tank           2     3     flow_converging   1    1.000                 # 16');
 									
 									&replace ($hse_file->{"pln"}, "#CONTAINMENTS_NUM", 1, 1, "%s   %s\n", '8', '# Total number of containments');
-									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "ASHP             3   $zone_mechanical    0.00000    0.00000");
+									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "ASHP             0   0    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "HW_tank          3   $zone_mechanical    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "aux-boiler       3   $zone_mechanical    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "pump_radiator    3   $zone_mechanical    0.00000    0.00000");
@@ -9274,7 +9299,7 @@ MAIN: {
 									&insert ($hse_file->{'pln'}, "#CONNECTIONS_DATA", 1, 0, 0, "%s \n", 'HW_tank           2     3     flow_converging   1    1.000                 # 18');
 									
 									&replace ($hse_file->{"pln"}, "#CONTAINMENTS_NUM", 1, 1, "%s   %s\n", '9', '# Total number of containments');
-									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "ASHP             3   $zone_mechanical    0.00000    0.00000");
+									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "ASHP             0   0    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "HW_tank          3   $zone_mechanical    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "aux-boiler       3   $zone_mechanical    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "pump_radiator    3   $zone_mechanical    0.00000    0.00000");
@@ -9304,7 +9329,7 @@ MAIN: {
 
 									
 									&replace ($hse_file->{"pln"}, "#CONTAINMENTS_NUM", 1, 1, "%s   %s\n", '10', '# Total number of containments');
-									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "ASHP             3   $zone_mechanical    0.00000    0.00000");
+									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "ASHP             0   0    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "HW_tank          3   $zone_mechanical    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "aux-boiler       3   $zone_mechanical    0.00000    0.00000");
 									&insert ($hse_file->{'pln'}, "#CONTAINMENTS_DATA", 1, 0, 0, "%s \n", "pump_radiator    3   $zone_mechanical    0.00000    0.00000");

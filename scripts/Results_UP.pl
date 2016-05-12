@@ -107,7 +107,7 @@ COMMAND_LINE: {
 	print "Please specify which upgrade have been applied:  \n";
 	my $list_of_upgrades = {1, "Solar domestic hot water", 2, "Window area modification", 3, "Window type modification", 
 			     4, "Fixed venetian blind", 5, "Fixed overhang", 6, "Phase change materials", 
-			     7, "Controllabe venetian blind", 8, "Photovoltaics", 9, "BIPV/T", 10, "ICE_CHP", 11, "SE_CHP", 12, "Solar Combisystem"};
+			     7, "Controllabe venetian blind", 8, "Photovoltaics", 9, "BIPHVT", 10, "ICE_CHP", 11, "SE_CHP", 12, "Solar Combisystem"};
 	foreach (sort {$a<=>$b} (keys(%{$list_of_upgrades}))){
 		 print "$_ : ", $list_of_upgrades->{$_}, "\t";
 	}
@@ -345,6 +345,7 @@ sub collect_results_data {
 		if ($results_all->{'house_results'}->{$hse_name}->{'use/non_condensing_boiler/src/oil/energy/integrated'}) {$aux_heat = $aux_heat + $results_all->{'house_results'}->{$hse_name}->{'use/non_condensing_boiler/src/oil/energy/integrated'}};
 		if ($results_all->{'house_results'}->{$hse_name}->{'use/space_heating/energy/integrated'}) {$main_heat = $main_heat + $results_all->{'house_results'}->{$hse_name}->{'use/space_heating/energy/integrated'}};
 		if ($results_all->{'house_results'}->{$hse_name}->{'use/ASHP/src/electricity/energy/integrated'}) {$main_heat = $main_heat + $results_all->{'house_results'}->{$hse_name}->{'use/ASHP/src/electricity/energy/integrated'}};
+		if ($results_all->{'house_results'}->{$hse_name}->{'use/WAHP/src/electricity/energy/integrated'}) {$main_heat = $main_heat + $results_all->{'house_results'}->{$hse_name}->{'use/WAHP/src/electricity/energy/integrated'}};
 
 		if ($zones_heat > 0) {
 			$results_all->{'house_results'}->{$hse_name}->{'Zone_heat/energy/integrated'} = sprintf($units->{'GJ'}, $zones_heat);

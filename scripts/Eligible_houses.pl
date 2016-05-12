@@ -877,34 +877,40 @@ foreach my $hse_type (@hse_types) {
 								
 							};
 							
-								
-							# examine the existance of attic and if the DR house is middle row attachment
-							if ($new_data->{'ceiling_flat_type'} == 2 || $new_data->{'attachment_type'} == 4) {
+							if (defined ($new_data->{'heating_energy_src'} && $new_data->{'heating_equip_type'})) {
+								if (($new_data->{'heating_energy_src'} == 1 && $new_data->{'heating_equip_type'} =~ /[5|6|7]/)  || ($new_data->{'heating_energy_src'} == 5 && $new_data->{'heating_equip_type'} =~ /[3|4]/)
+								|| $new_data->{'heating_energy_src'} =~ /[2|3|4]/) 	# Energy source 5 is wood, it is disabled if wood is not desired to be replaced by oil or NG
+								# if the heating fuel type is 2.Natural gas, 3.Oil, 4.Propane
+								{	
+									# examine the existance of attic and if the DR house is middle row attachment
+									if ($new_data->{'ceiling_flat_type'} == 2 || $new_data->{'attachment_type'} == 4) {
 # 								# next criteria is existance of DHW
-								unless ($new_data->{'DHW_equip_type'} == 9){
+										#unless ($new_data->{'DHW_equip_type'} == 9){
 # 									if the front orientation of the house is south, south-east or south-west to have a ridgeline running west-east the width which is always front of the house should be more than depth
-									if ($new_data->{'front_orientation'} == 3 || $new_data->{'front_orientation'} == 7) {
-										if ($width->{$last_zone} < $depth) {
-											$houses_BIPHVT[$count_BIPHVT] = $new_data->{'file_name'};
-											$count_BIPHVT++;
-											print $FILEOUT "$_ \n";
-										}
+											if ($new_data->{'front_orientation'} == 3 || $new_data->{'front_orientation'} == 7) {
+												if ($width->{$last_zone} < $depth) {
+													$houses_BIPHVT[$count_BIPHVT] = $new_data->{'file_name'};
+													$count_BIPHVT++;
+													print $FILEOUT "$_ \n";
+												}
+											}
+											else {
+												if ($width->{$last_zone} > $depth) {
+													$houses_BIPHVT[$count_BIPHVT] = $new_data->{'file_name'};
+													$count_BIPHVT++;
+													print $FILEOUT "$_ \n";
+												}
+											}
+										#}
 									}
-									else {
-										if ($width->{$last_zone} > $depth) {
-											$houses_BIPHVT[$count_BIPHVT] = $new_data->{'file_name'};
-											$count_BIPHVT++;
-											print $FILEOUT "$_ \n";
+									elsif ($new_data->{'ceiling_flat_type'} == 3) {
+										if ($new_data->{'attachment_type'} == 2 || $new_data->{'attachment_type'} == 3) { # DR - left/right end house type
+											if (($width->{$last_zone} * 2 / 3) >= 4 && ($new_data->{'DHW_equip_type'} != 9)){
+												$houses_BIPHVT[$count_BIPHVT] = $new_data->{'file_name'};
+												$count_BIPHVT++;
+												print $FILEOUT "$_ \n";
+											}
 										}
-									}
-								}
-							}
-							elsif ($new_data->{'ceiling_flat_type'} == 3) {
-								if ($new_data->{'attachment_type'} == 2 || $new_data->{'attachment_type'} == 3) { # DR - left/right end house type
-									if (($width->{$last_zone} * 2 / 3) >= 4 && ($new_data->{'DHW_equip_type'} != 9)){
-										$houses_BIPHVT[$count_BIPHVT] = $new_data->{'file_name'};
-										$count_BIPHVT++;
-										print $FILEOUT "$_ \n";
 									}
 								}
 							}

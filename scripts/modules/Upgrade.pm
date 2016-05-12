@@ -1540,6 +1540,7 @@ sub print_results_out_up {
 #Rasoul: Added required parameters to the output
 		push(@result_total, grep(/^gen\/\w+\/\w+\/\w+\/\w+\/integrated$/, @{&order($results_all->{'parameter'}, [qw(site src use gen)])})); # Append electricity generation
 		push(@result_total, grep(/^use\/ASHP\/\w+\/\w+\/\w+\/integrated$/, @{&order($results_all->{'parameter'}, [qw(site src use gen)])})); # Append Electricity use
+		push(@result_total, grep(/^use\/WAHP\/\w+\/\w+\/\w+\/integrated$/, @{&order($results_all->{'parameter'}, [qw(site src use gen)])})); # Append Electricity use
 		push(@result_total, grep(/^use\/condensing_boiler\/\w+\/\w+\/\w+\/integrated$/, @{&order($results_all->{'parameter'}, [qw(site src use gen)])})); # Append NG use
 		push(@result_total, grep(/^use\/non_condensing_boiler\/\w+\/\w+\/\w+\/integrated$/, @{&order($results_all->{'parameter'}, [qw(site src use gen)])})); # Append oil use
 		push(@result_total, @{&order($results_all->{'parameter'}, [qw(Zone_heat Heating_Sys Zone_cool Cooling_Sys)], [''])}); # Append zone and system heating/cooling info

@@ -397,7 +397,7 @@ This file holds values related to plant components for ESP-r-->
 		<comp_data number="21" description="Controller pf (-)" amount="1.0000"/>                                               
 		<comp_data number="22" description="Tout max (degC)" amount="90.000"/>                                                 
 		<comp_data number="23" description="Tin max (degC)" amount="65.000"/>                                                  
-		<comp_data number="24" description="Defrost cycle trigger ambient temp (degC)" amount="-5.0000"/>                       
+		<comp_data number="24" description="Defrost cycle trigger ambient temp (degC)" amount="0.0000"/>                       
 		<comp_data number="25" description="Defrost cycle time calc (0 - no defrost 1-user def 2-f(RH))" amount="0.0000"/>     
 		<comp_data number="26" description="Defrost cycle  calc coefficient b0 or time (-)" amount="6.0000"/>                  
 		<comp_data number="27" description="Defrost cycle  calc coefficient b1 (-)" amount="0.04000"/>                          
@@ -405,7 +405,7 @@ This file holds values related to plant components for ESP-r-->
 		<comp_data number="29" description="Min defrost time (mins)" amount="0.0000"/>                                         
 		<comp_data number="30" description="Max defrost time (mins)" amount="10.000"/>                                         
 		<comp_data number="31" description="Temp compensation on/off (0-off 1-on)" amount="1.0000"/>                           
-		<comp_data number="32" description="Nominal water return temperature (Deg C)" amount="55.000"/>                        
+		<comp_data number="32" description="Nominal water return temperature (Deg C)" amount="50.000"/>                        
 		<comp_data number="33" description="Nominal water return deadband (Deg C)" amount="5.0000"/>                          
 		<comp_data number="34" description="Temp compensation start temperature [Deg C]" amount="3.0000"/>                     
 		<comp_data number="35" description="Temp compensation end temperature (-)" amount="17.000"/>                           
@@ -505,8 +505,8 @@ This file holds values related to plant components for ESP-r-->
 		<comp_data number="4" description="Stand-by gas consumption relative to 1 (-)" amount="0.10000E-01"/>                      
 		<comp_data number="5" description="Gas heating value at STP (J/m^3)" amount="0.38000E+08"/>                                
 		<comp_data number="6" description="Full load water sided efficiency at Tc (-)" amount="0.92000"/>                      
-		<comp_data number="7" description="Tangent of efficiency curve for Tj .LE. Tc (1/K)" amount="-0.25000"/>                   
-		<comp_data number="8" description="Tangent of efficiency curve for Tj > Tc (1/K)" amount="-0.15000"/>                   
+		<comp_data number="7" description="Tangent of efficiency curve for Tj .LE. Tc (1/K)" amount="-0.0025000"/>                   
+		<comp_data number="8" description="Tangent of efficiency curve for Tj > Tc (1/K)" amount="-0.0015000"/>                   
 		<comp_data number="9" description="Stand-by loss at Tj = Te relative to 1 (-)" amount="0.0000"/>                      
 		<comp_data number="10" description="Tangent of stand-by loss curve (1/K)" amount="0.000"/>                            
 		<comp_data number="11" description="Normalized start-stop loss (s)" amount="5.0000"/>                                  
@@ -520,8 +520,8 @@ This file holds values related to plant components for ESP-r-->
 		<comp_data number="4" description="Stand-by gas consumption relative to 1 (-)" amount="0.10000E-01"/>                      
 		<comp_data number="5" description="Gas heating value at STP (J/m^3)" amount="0.386400E+11"/>                                
 		<comp_data number="6" description="Full load water sided efficiency at Tc (-)" amount="0.8500"/>                      
-		<comp_data number="7" description="Tangent of efficiency curve for Tj .LE. Tc (1/K)" amount="-0.15000"/>                   
-		<comp_data number="8" description="Tangent of efficiency curve for Tj > Tc (1/K)" amount="-0.15000"/>                   
+		<comp_data number="7" description="Tangent of efficiency curve for Tj .LE. Tc (1/K)" amount="-0.0015000"/>                   
+		<comp_data number="8" description="Tangent of efficiency curve for Tj > Tc (1/K)" amount="-0.0015000"/>                   
 		<comp_data number="9" description="Stand-by loss at Tj = Te relative to 1 (-)" amount="0.0000"/>                      
 		<comp_data number="10" description="Tangent of stand-by loss curve (1/K)" amount="0.000"/>                            
 		<comp_data number="11" description="Normalized start-stop loss (s)" amount="5.0000"/>                                  
