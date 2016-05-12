@@ -870,7 +870,8 @@ sub organize_xml_log_tree {
 														$i++;
 													}
 												}
-											elsif ($last_2 =~ /electricity|natural_gas|Heat_Out/) {	#Rasoul: Heat_Out is used for ASHP generation
+											elsif ($last_2 =~ /electricity|natural_gas|Heat_Out|Q1|Q2|QHX1|QHX2/) {	#Rasoul: Heat_Out is used for ASHP generation
+																				# Q1, QHX1 and QHX2 are used for the storage tank
 												my @name = keys %{$par->{$key_2}->{$key_3}->{$last}->{$last_2}};
 												foreach my $nam (@name) {
 	# 										
